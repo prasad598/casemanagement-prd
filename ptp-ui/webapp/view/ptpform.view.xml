@@ -10,6 +10,7 @@
         id="searchPage"
         title="{i18n>title}"
     >
+    
         <content>
             <ObjectHeader
                 icon="{UserInfo>/userImage}"
