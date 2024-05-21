@@ -1,0 +1,125 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uf="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.uxap" xmlns:month="sap.ui.unified.calendar">
+	<u:ObjectPageLayout enableLazyLoading="true" useIconTabBar="true" showTitleInHeaderContent="false">
+		<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="201912SR0000001 Service Rating" objectImageURI="" objectImageShape="Circle"
+				isObjectIconAlwaysVisible="true"></u:ObjectPageHeader>
+		</u:headerTitle>
+		<u:sections>
+		
+			<u:ObjectPageSection id="Attachments2" title="How sastisfied are you with your overall service experience?" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									
+									<IconTabBar id="itb1ss" selectedKey="key3" upperCase="false" class="sapUiResponsiveContentPadding" select="onSelectIconFilter">
+									<items>
+										<IconTabFilter icon="" text="." enabled = "false" count="" key="sd" tooltip="" iconColor="Neutral"></IconTabFilter>
+										<IconTabFilter icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-very-bad" text="VeryDissatisfied" count="" key="VeryDissatisfied" tooltip="Very Dissatisfied" iconColor="Negative"></IconTabFilter>
+										<IconTabFilter icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-bad" count="" key="Dissatisfied" text="Dissatisfied" tooltip="Dissatisfied"
+											iconColor="Critical"></IconTabFilter>
+										<!--<IconTabFilter icon="sap-icon://SAP-icons-TNT/receive-task" count="{RequestorInfo>/invoiceCount}" tooltip="Invoice generated" text="CC EMAIL"-->
+										<!--	iconColor="Contrast"></IconTabFilter>-->
+										<IconTabFilter icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-neutral" count="" key="Neutral" tooltip="Neutral" text="Neutral"
+											iconColor="Neutral"></IconTabFilter>
+									   <IconTabFilter icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-happy" count="" key="Satisfied" tooltip="Satisfied" text="Satisfied"
+											iconColor="Positive"></IconTabFilter>
+									   <IconTabFilter icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-very-happy" count="" key="VerySatisfied" tooltip="Very Satisfied" text="Very Satisfied"
+											iconColor="Contrast"></IconTabFilter>
+									</items>
+								</IconTabBar>
+									
+									<!--<Title class="h2Title" text="Upload Supporting Documents"/>
+									<Label/>
+									<HBox>
+										<uf:FileUploader id="fileUploader2" style="Default" placeholder="Select File"/>
+										<Button icon="sap-icon://upload" press="handleUploadPress"/>
+									</HBox>-->
+									<!--<VBox>
+										<CheckBox text="Email to Customer" selected="{NotificationReq>/isEmailCustomerSelected}" select="onSelectEmailCustomer"/>
+										<MultiInput id="emailMInputId" placeholder="Insert Email Addresses" change="onEnterCustomerEmail" showValueHelp="false"
+											visible="{ReadOnlyModel>/isEmailCustomerVisible}"></MultiInput>
+									</VBox>-->
+								<!--	<CheckBox text="Email back to Requestor"/>
+									<CheckBox text="Mail Hardcopy"/>
+									<VBox>
+										<CheckBox text="Upload to Customer's portal" select="onSelectUploadCustomerPortal"/>
+										<Input width="50%" value="{NotificationReq>/customerPortal}" placeholder="Portal Address" visible="{ReadOnlyModel>/isUploadCustomerVisible}"/>
+									</VBox>-->
+									<Table items="" visible = "false">
+										<columns>
+											<Column>
+												<Text text=""/>
+											</Column>
+											<Column>
+												<Text text="Very Dissatisfied"/>
+											</Column>
+											<Column>
+												<Text text="Dissatisfied"/>
+											</Column>
+											<Column>
+												<Text text="Neutral"/>
+											</Column>
+											<Column>
+												<Text text="Satisfied"/>
+											</Column>
+											<Column>
+												<Text text="Very Satisfied"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem>
+												<cells>
+												<Text text=""/>
+												<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-very-bad" tooltip="Very Dissatisfied" visible="true" press="onPressServiceRate"
+																type="Transparent"/>
+												<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-bad" tooltip="Dissatisfied" visible="true" press="onPressServiceRate"
+																type="Transparent"/>
+												<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-neutral" tooltip="Neutral" visible="true" press="onPressServiceRate"
+																type="Transparent"/>
+												<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-happy" tooltip="Satisfied" visible="true" press="onPressServiceRate"
+																type="Transparent"/>
+												<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-face-very-happy" tooltip="Very Satisfied" visible="true" press="onPressServiceRate"
+																type="Transparent"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+					
+				<u:ObjectPageSubSection title="" visible = "true">
+							<u:blocks>
+								<f:SimpleForm layout="ResponsiveLayout" labelSpanL="2" editable="true" maxContainerCols="2">
+									<f:content>
+								<core:Title text="Comments:"/>
+								
+									<Label text="Any Other comments you would like us to know?"/>
+		                           <TextArea id="commentId"
+			                        value=""
+			                        valueLiveUpdate=""
+			                        tooltip = "Any Other comments you would like us to know?"
+			                        placeholder = "Comment Here...."
+			                        liveChange="handleLiveChange"
+			                        rows="4"
+		                           />
+		                           
+								</f:content>
+								</f:SimpleForm>
+							</u:blocks>
+						</u:ObjectPageSubSection>
+					
+				</u:subSections>
+				
+				
+				
+				
+			</u:ObjectPageSection>
+	
+		</u:sections>
+	</u:ObjectPageLayout>
+</core:FragmentDefinition>

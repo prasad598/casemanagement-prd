@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<MessagePopover id="messagePopOverId" items="{MessagePopOver>/}" afterClose="messageAfterClose">
+		<items>
+			<MessagePopoverItem type="{MessagePopOver>type}" title="{MessagePopOver>title}" description="{MessagePopOver>message}"/>
+		</items>
+	</MessagePopover>
+</core:FragmentDefinition>

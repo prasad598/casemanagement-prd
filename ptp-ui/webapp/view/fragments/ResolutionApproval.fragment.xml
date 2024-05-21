@@ -1,0 +1,220 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uf="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.uxap" xmlns:month="sap.ui.unified.calendar">
+	
+	<u:ObjectPageLayout enableLazyLoading="true" useIconTabBar="true" showTitleInHeaderContent="false">
+		<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="Service Request 201912SR00001" 
+				isObjectIconAlwaysVisible="true"></u:ObjectPageHeader>
+		</u:headerTitle>
+		<u:headerContent>
+		</u:headerContent>
+		<u:sections>
+			<u:ObjectPageSection title="{i18n>Billing.Section.Details}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="">
+						<u:blocks>
+							<f:SimpleForm layout="ResponsiveLayout" labelSpanL="2" editable="true" maxContainerCols="2">
+								<f:content>
+									<core:Title text="{i18n>Billing.Details.Form}"/>
+			
+										<Label text="Service Request Category" required = "true"/>
+									    	<Select id="oCaseCategoryList5" editable = "false" change="onListSelect" >
+									        <core:Item key="0" text="Invoice  Block / Release"/>		
+                                            <core:Item key="1" text="Payment  Status/ Advice"/>
+                                            <core:Item key="2" text="Invoice  Block / Release"/>
+                                            <core:Item key="3" text="AP / AR Contra"/>
+                                            <core:Item key="4" text="Vendor / Interco SOA"/>
+                                            <core:Item key="5" text="Audit Confirmation"/>
+                                            <core:Item key="6" text="Others–Issue Resolution"/>
+                                            <core:Item key="7" text="Kofax User Profile Change"/>
+                                            
+                                           </Select>
+                                           
+                                        <Label text="Service Details" required = "true"/>
+										
+									    	<Input editable = "false" value = "Request for Invoice Block"  >
+								
+                                         </Input>  
+                                           
+                                       <Label text="Entity Name" required = "true"/>
+										
+									    	<Select id="oEntityNameList5" editable = "false">
+									    
+                                            <core:Item key="1" text="Buying"/>	
+                                            
+                                           </Select>  
+                                           
+                                       <Label text="Vendor Name" required = "true"/>
+										
+									    	<Input editable = "false" value = "Electronincs">
+								
+                                           </Input>     
+                                           
+                                        <Label text="Requested For"/>
+										
+									    	<Input  editable = "true" showValueHelp="true" valueHelpRequest="onValueHelpCountry" valueHelpOnly="true" value = "Vikas Kumar">
+								
+                                           </Input>    
+                                           
+                                          <Label  text="Urgent Request" visible = "true"/>
+										
+									    	<CheckBox text="Urgent" valueState="Error" enabled = "true"/>                           
+			
+									<core:Title text=""/>
+						           
+                                         <Label text="Priority" required = "true"/>
+										
+									  <Select >
+									    
+									        <core:Item key="0" text="Very High"/>		
+                                            <core:Item key="1" text="High"/>
+                                            <core:Item key="2" text="Medium"/>		
+                                            <core:Item key="3" text="Low"/>
+                                            <core:Item key="4" text="Very Low"/>		
+                                            
+                                            
+                                         </Select>  
+                                         
+                                         
+                                           
+                                           <Label text="Staff Assigned" required = "true"/>
+										
+									       <Input  value = "Vikas Kumar" editable = "false">
+								
+                                           </Input> 
+                                           
+                                         <Label  text="Invoice No" visible = "true" required = "true"/>
+										
+									    	<Input  editable = "false" value = "INV00098" visible = "true">
+								
+                                        </Input>    
+                                         
+                                      <Label text="Kofax Payment Request No"/>
+										
+									    	<Input  editable = "false" value = "kfxPRNT00009">
+								
+                                     </Input>  
+                                   
+                                 <Label text="Source of problem" required = "true"/>
+									   <Select >
+									   	
+									        <core:Item key="0" text="Not applicable"/>		
+                                            <core:Item key="1" text="Requestor"/>
+                                            <core:Item key="2" text="Procurement"/>		
+                                            <core:Item key="3" text="Logistics"/>
+                                            <core:Item key="4" text="BP Finance"/>
+                                            <core:Item key="1" text="Approver"/>
+                                            <core:Item key="2" text="Vendor"/>		
+                                            <core:Item key="3" text="PTP - IP"/>
+                                            <core:Item key="4" text="RTR - WHT"/>
+                                            <core:Item key="1" text="PTP - Payment"/>
+                                            <core:Item key="2" text="System"/>		
+                                            <core:Item key="3" text="Others"/>
+                                            
+                                   </Select>    
+                                     
+                                <Label text="Case background" required = "true"/>
+		                           <TextArea id="casebgid"
+			                        value=""
+			                        valueLiveUpdate=""
+			                        tooltip = "Case background?"
+			                        placeholder = "Case background write Here...."
+			                        liveChange="handleLiveChange"
+			                        rows="3"
+		                           />
+                                         
+								</f:content>
+							</f:SimpleForm>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection  title="Attachments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<Title class="h2Title" text="Uploaded Supporting Documents"/>
+									<Label/>
+									<HBox>
+										<uf:FileUploader  visible = "false" style="Default" placeholder="Select File"/>
+										<Button visible = "false" icon="sap-icon://upload" press="handleUploadPress"/>
+									</HBox>
+									<!--<VBox>
+										<CheckBox text="Email to Customer" selected="{NotificationReq>/isEmailCustomerSelected}" select="onSelectEmailCustomer"/>
+										<MultiInput id="emailMInputId" placeholder="Insert Email Addresses" change="onEnterCustomerEmail" showValueHelp="false"
+											visible="{ReadOnlyModel>/isEmailCustomerVisible}"></MultiInput>
+									</VBox>-->
+								<!--	<CheckBox text="Email back to Requestor"/>
+									<CheckBox text="Mail Hardcopy"/>
+									<VBox>
+										<CheckBox text="Upload to Customer's portal" select="onSelectUploadCustomerPortal"/>
+										<Input width="50%" value="{NotificationReq>/customerPortal}" placeholder="Portal Address" visible="{ReadOnlyModel>/isUploadCustomerVisible}"/>
+									</VBox>-->
+									<Table items="{NotificationReq>/attachmentList}">
+										<columns>
+											<Column>
+												<Text text="Document"/>
+											</Column>
+											<Column>
+												<Text text="Link"/>
+											</Column>
+											<Column>
+												<Text text="Indicate for Email"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem>
+												<cells>
+													<Text text="{NotificationReq>documentType}" wrapping="true"/>
+													<Link text="{NotificationReq>documentType}" press="onPressAttachmentDownload"/>
+													<CheckBox selected="{NotificationReq>isSelected}"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection title="Resolution Comment" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<FeedInput class="sapUiSmallMarginTopBottom" maxLength="200" value = "Test Text" post="onPostComment" showIcon="false"/>
+									<List growing="true" growingThreshold="4" items="{NotificationReq>/commentList}" showSeparators="Inner">
+										<FeedListItem icon="{RequestorInfo>/userImage}" iconDensityAware="false" info="{NotificationReq>userType}"
+											sender="{NotificationReq>userName}" text="{NotificationReq>comments}" timestamp="{ path: 'NotificationReq>commentDisplayDate' }"/>
+									</List>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+				<u:ObjectPageSection title="Resolution Response" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<FeedInput class="sapUiSmallMarginTopBottom" maxLength="200" value = "Test Text" post="onPostComment" showIcon="false"/>
+									<List growing="true" growingThreshold="4" items="{NotificationReq>/commentList}" showSeparators="Inner">
+										<FeedListItem icon="{RequestorInfo>/userImage}" iconDensityAware="false" info="{NotificationReq>userType}"
+											sender="{NotificationReq>userName}" text="{NotificationReq>comments}" timestamp="{ path: 'NotificationReq>commentDisplayDate' }"/>
+									</List>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+		</u:sections>
+	</u:ObjectPageLayout>
+
+</core:FragmentDefinition>

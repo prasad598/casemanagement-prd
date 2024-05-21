@@ -1,0 +1,92 @@
+_schema-version: "3.2"
+ID: ptp-case-management
+version: 0.0.1
+modules:
+- name: ptp-case-management-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: ptp-case-management-destination-service
+    parameters:
+      content-target: true
+  - name: ptp-case-management_html_repo_host
+    parameters:
+      service-key:
+        name: ptp-case-management_html_repo_host-key
+  - name: uaa_ptp-case-management
+    parameters:
+      service-key:
+        name: uaa_ptp-case-management-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: ptp_app_ptp_case_management_html_repo_host
+          ServiceInstanceName: ptp-case-management-html5-app-host-service
+          ServiceKeyName: ptp-case-management_html_repo_host-key
+          sap.cloud.service: ptp-app
+        - Authentication: OAuth2UserTokenExchange
+          Name: ptp_app_uaa_ptp_case_management
+          ServiceInstanceName: ptp-case-management-xsuaa-service
+          ServiceKeyName: uaa_ptp-case-management-key
+          sap.cloud.service: ptp-app
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: ptp-case-management-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ptp-case-management_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comstenggbtpptpui.zip
+      name: comstenggbtpptpui
+      target-path: resources/
+- name: comstenggbtpptpui
+  type: html5
+  path: ptp-ui
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ptp-case-management-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ptp-case-management-destination-service
+    service-plan: lite
+- name: ptp-case-management_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ptp-case-management-html5-app-host-service
+    service-plan: app-host
+- name: uaa_ptp-case-management
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ptp-case-management-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
