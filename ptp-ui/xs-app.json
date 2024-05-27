@@ -3,13 +3,6 @@
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/sap/(.*)$",
-      "target": "/sap/$1",
-      "destination": "sthubsystem-qa",
-      "authenticationType": "none",
-      "csrfProtection": false
-    },
-    {
       "source": "^/poutil/(.*)$",
       "target": "/poutil/$1",
       "destination": "podevtu",

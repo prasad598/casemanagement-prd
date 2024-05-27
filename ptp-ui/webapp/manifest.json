@@ -16,15 +16,7 @@
             "toolsId": "d08d8193-fa90-46aa-b1ab-00a9c08a8d88"
         },
         "dataSources": {
-            "mainService": {
-                "uri": "/sap/opu/odata/iwpgw/TASKPROCESSING;v=0002/",
-                "type": "OData",
-                "settings": {
-                    "annotations": [],
-                    "localUri": "localService/metadata.xml",
-                    "odataVersion": "2.0"
-                }
-            }
+            
         }
     },
     "sap.ui": {
@@ -49,7 +41,7 @@
             "minUI5Version": "1.124.0",
             "libs": {
                 "sap.m": {},
-                "sap.ui.core": {},
+                "sap.ui.core": {"minUI5Version": "1.124.0"},
                 "sap.f": {},
                 "sap.suite.ui.generic.template": {},
                 "sap.ui.comp": {},
@@ -68,11 +60,6 @@
                 "settings": {
                     "bundleName": "com.stengg.btp.ptpui.i18n.i18n"
                 }
-            },
-            "": {
-                "dataSource": "mainService",
-                "preload": true,
-                "settings": {}
             }
         },
         "resources": {

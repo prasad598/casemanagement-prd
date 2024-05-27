@@ -14,7 +14,7 @@
         maxContainerCols="2"
     >
         <f:content>
-            <core:Title text="{i18n>Billing.Details.Form}" />
+            <core:Title text="Service Request Details" />
             <Label
                 text="Service Request category"
                 required="true"
@@ -105,6 +105,9 @@
                 growing="true"
                 maxLength="3000"
                 enabled="{oReadOnlyModel>/isFieldEnabled}"
+                liveChange="onLiveChangeSrDetails"
+                valueState="{oReadOnlyModel>/srValueState}"
+                valueStateText="{oReadOnlyModel>/srValueStateTxt}"
             />
             <Label
                 text="Entity Name(of your customer)"
@@ -261,7 +264,7 @@
                                     </Select>
                                    
                                    
-                                        <uf:FileUploader id="fileUploader" style="Default" placeholder="Select File"/>
+                                        <uf:FileUploader id="fileUploader" style="Default" placeholder="Select File" typeMissmatch="typeMissmatch" fileType="xlsx,pdf"/>
                                         <Button icon="sap-icon://upload" press="handleUploadPress"/>
                                     </HBox>
                                    

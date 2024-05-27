@@ -16,6 +16,9 @@ server:
             - /test-resources
           url: https://ui5.sap.com
         backend:
+          - path: /poutil
+            pathprefix: /
+            destination: podevtu
           - path: /sap
             url: https://mobilebizqas.stengglink.com
             client: '888'

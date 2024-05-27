@@ -24,29 +24,28 @@ sap.ui.define([
 			oEntityModel.setProperty("/EntityList", entityList);
 
 		},
+		onLiveChangeSrDetails : function(oEvent){
+			// Regular expression to detect URLs
+			const urlPattern = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
+			var isValid =  !urlPattern.test(oEvent.getParameter("value"));
+			if(!isValid){
+				this.getView().getModel("oReadOnlyModel").setProperty("/srDetails","abc");
+				this.getView().getModel("oReadOnlyModel").setProperty("/srValueStateTxt","SR details should not contain any url")
+				this.getView().getModel("oReadOnlyModel").setProperty("/srValueState","Error");
+				this.getView().getModel("oReadOnlyModel").refresh(true);
+			}
+			else{
+				this.getView().getModel("oReadOnlyModel").setProperty("/srValueState","None");
+				
+			}
+		},
 
-		getRequests : function(){
-			this.getAllUserRequestsNDetails();
-			this.oMessagePopover = this.getView().byId("messagePopOverId");
-			// Entity Loads
-			var selectedSector = "ENTITY";
-			var oEntityModel = this.modelAssignment("oEntityModel");
-			// var entityList = this.loadBUList(selectedSector);
-			var buModel = new JSONModel();
-			// var sServiceUrl = Config.dbOperations.loadLookupData + vendorSector;
-			var sServiceUrl = "/poutil/rest/PTP/retrievePTPLookup/"+selectedSector; 
-			buModel.loadData(this.getModulePath()+sServiceUrl, null, false);
-
-			//Success call Back
-			buModel.attachRequestCompleted(null, function (jsonData) {
-				var entityElement = {
-					"code": "",
-					"desc": ""
-				};
-				jsonData.unshift(entityElement);
-				oEntityModel.setProperty("/EntityList", jsonData);			
-			});	
-
+		getRequests : function (){
+			var retrieveModel = new JSONModel();
+			var oHeader = {
+				"Content-Type": "application/json; charset=utf-8"
+			};
+			retrieveModel.loadData(this.getModulePath()+"/poutil/rest/PTP/retrieveServiceRequestByRequestor", null, true, "GET", false, false, oHeader);
 		},
 		getModulePath: function () {
 			var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
@@ -1616,6 +1615,7 @@ sap.ui.define([
 			oRequestDataModel.setProperty("/attachmentList", attachments);
 		},
 		handleUploadPress: function () {
+			var that = this;
 			var formData = new FormData();
 			var requestData = this.modelAssignment("oRequestData").getData();
 			var darftId = requestData.draftId;
@@ -1634,7 +1634,10 @@ sap.ui.define([
 						formData.append("request", JSON.stringify(requestObject));
 						var domRef = fU.getFocusDomRef();
 						var file = domRef.files[0];
+						// var file = {};
 						var base64marker = "data:" + file.type + ";base64,";
+						// var base64marker = "data:" + "application/pdf" + ";base64,";
+						
 						var reader = new FileReader();
 
 						// Create a File Reader object
@@ -1661,7 +1664,7 @@ sap.ui.define([
 							var settings = {
 								"async": true,
 								"crossDomain": true,
-								"url": "/poutil/rest/File/upload",
+								"url":that.getModulePath()+"/poutil/rest/File/upload",
 								"method": "POST",
 								"processData": false,
 								"contentType": false,
