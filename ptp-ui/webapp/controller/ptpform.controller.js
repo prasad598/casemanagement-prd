@@ -10,7 +10,9 @@ sap.ui.define([
 		isInitial: true,
 		onInit: function () {
 			// this.getUserDetails();
-			this.getAllUserRequestsNDetails();
+			
+			
+			this.getUserInfo();
 			this.oMessagePopover = this.getView().byId("messagePopOverId");
 			// Entity Loads
 			var selectedSector = "ENTITY";
@@ -23,7 +25,51 @@ sap.ui.define([
 			entityList.unshift(entityElement);
 			oEntityModel.setProperty("/EntityList", entityList);
 
+			var oModel = new sap.ui.model.json.JSONModel();
+			this.getView().setModel(oModel, "userModel");
+	  
+			
 		},
+		getUserInfo: function ()  {
+            const url = this.getBaseURL() + "/user-api/currentUser";
+            var oModel = new JSONModel();
+            var mock = {
+                firstname: "Dummy",
+                lastname: "User",
+                email: "dummy.user@com",
+                name: "dummy.user@com",
+                displayName: "Dummy User (dummy.user@com)"
+            }; 
+
+            oModel.loadData(url);
+            oModel.dataLoaded()
+            .then(()=>{
+
+                //check if data has been loaded
+                //for local testing, set mock data
+                if (!oModel.getData().email) {
+                    oModel.setData(mock);
+                }
+                this.getView().setModel(oModel, "userInfo");
+				
+				this.getAllUserRequestsNDetails();
+				
+            })
+            .catch(()=>{               
+                oModel.setData(mock);
+                this.getView().setModel(oModel, "userInfo");
+				
+            });
+			//this.getAllUserRequestsNDetails();
+        },      
+        
+        getBaseURL: function () {
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+            var appPath = appId.replaceAll(".", "/");
+            var appModulePath = jQuery.sap.getModulePath(appPath);
+            return appModulePath;
+        },        
+		
 		onLiveChangeSrDetails : function(oEvent){
 			// Regular expression to detect URLs
 			const urlPattern = /https?:\/\/[^\s/$.?#].[^\s]*/gi;
@@ -94,7 +140,8 @@ sap.ui.define([
 		saveNSubmitServiceRequest: function (requestData,actionType, caller,callBack) {
 
 			var response;
-			var sServiceUrl = (requestData.isClarificationReq || requestData.isPendingClose || requestData.cancelVisible) ? Config.dbOperations.saveNSubmitPTPRequestUrl : Config.dbOperations.saveNSubmitRequestUrl;
+			var sServiceUrl = (requestData.
+				Req || requestData.isPendingClose || requestData.cancelVisible) ? Config.dbOperations.saveNSubmitPTPRequestUrl : Config.dbOperations.saveNSubmitRequestUrl;
 			var serviceReqModel = new JSONModel();
 			var oHeader = {
 				"Content-Type": "application/json; charset=utf-8"
@@ -136,7 +183,7 @@ sap.ui.define([
 		/**
 		 * Delete Draft Request
 		 */
-		deleteDraftRequest: function (draftNumber) {
+		deleteDraftRequestByDraftId: function (draftNumber) {
 			var oModel = new JSONModel();
 			var sServiceUrl = Config.dbOperations.deleteDraftRequest + draftNumber;
 			// sServiceUrl = sServiceUrl.replace("@filterVal", gstTaxCode);
@@ -441,6 +488,7 @@ sap.ui.define([
 
 		editCloseCase: function (oEvent) {
 			this.initializeLocalModel();
+			isClarifcation = false;
 			var isValidTask;
 			var actionSource = oEvent.getSource().data("actionSource");
 
@@ -452,6 +500,7 @@ sap.ui.define([
 				this.modelAssignment("oReadOnlyModel").setProperty("/isCloseCaseVisible", true);
 				this.modelAssignment("oReadOnlyModel").setProperty("/isSaveSubmitVisible", false);
 				isValidTask = this.loadTaskDetails(historicalRequestItem);
+				isValidTask = true;
 				Formatter.formatDataBeforeEdit(historicalRequestItem);
 			} else {
 				this.modelAssignment("oReadOnlyModel").setProperty("/isFieldEnabled", true);
@@ -655,9 +704,9 @@ sap.ui.define([
 			textSerReqCat = oEvent.getSource().getSelectedItem().getText();
 
 			this.modelAssignment("oRequestData").setProperty("/srCategoryDesp", textSerReqCat);
-			this.modelAssignment("oRequestData").setProperty("/urgentRequest", false);
-			var checkBox = this.getView().byId("urgentReq");
-			checkBox.setSelected(false);
+			//this.modelAssignment("oRequestData").setProperty("/urgentRequest", false);
+			//var checkBox = this.getView().byId("urgentReq");
+		//	checkBox.setSelected(false);
 			if (textSerReqCat != "") {
 
 				this.getView().byId("oCaseCategoryList").setValueState("None");
@@ -733,8 +782,13 @@ sap.ui.define([
 		},
 		retrieveUserRequests: function (callBack) {
 			var retrieveModel = new JSONModel();
-			var sServiceUrl = Config.dbOperations.serviceRequestsUrl+ "?r=" + Formatter.getRandomNo(); //+ loggedInUser;
+
 			
+			var userInfoModel = this.getView().getModel("userInfo");
+            var userId = userInfoModel.getProperty("/email");
+			//var userId = "srisaisatya.mamidi@stengg.com";
+			//var sServiceUrl = Config.dbOperations.serviceRequestsUrl+ "?r=" + Formatter.getRandomNo(); //+ loggedInUser;
+			var sServiceUrl = Config.dbOperations.serviceRequestsUrl1+ userId;
 			var response;
 			var oHeader = {
 				"Content-Type": "application/json; charset=utf-8"
@@ -771,6 +825,13 @@ sap.ui.define([
 		onPressCreateNewRequest: function () {
 
 			this.modelAssignment("oRequestData").setData({});
+			var email=this.getView().getModel("userInfo").getProperty("/email");
+			var firstname=this.getView().getModel("userInfo").getProperty("/firstname");
+			var lastname=this.getView().getModel("userInfo").getProperty("/lastname");
+			var fullname=firstname+" "+lastname;
+			this.modelAssignment("userInfo").setProperty("/fullname",fullname);
+			this.modelAssignment("oRequestData").setProperty("/updatedById", email);
+			this.modelAssignment("oRequestData").setProperty("/updatedByName", fullname);
 			this.modelAssignment("oReadOnlyModel").setData({});
 			this.handleControls();
 			this.initializeLocalModel();
@@ -891,7 +952,7 @@ sap.ui.define([
 			var bundle = this.localizationBundle;
 			var actionSource = oEvent.getSource().data("actionSource");
 			var sPath = (actionSource === "DraftPage") ? oEvent.getSource().oParent.oParent.oBindingContexts.RequestorInfo.sPath : oEvent.getSource()
-				.oParent.oBindingContexts.RequestorInfo.sPath;
+			.oParent.oBindingContexts.RequestorInfo.sPath;
 			// var sPath = oEvent.getSource().oParent.oParent.oBindingContexts.RequestorInfo.sPath;
 			var historicalRequestItem = this.modelAssignment("RequestorInfo").getProperty(sPath);
 			that = this;
@@ -904,7 +965,10 @@ sap.ui.define([
 				beginButton: new sap.m.Button({
 					text: "OK",
 					press: function () {
-						that.deleteDraftRecord(historicalRequestItem.draftId);
+						//that.deleteDraftRecord(historicalRequestItem.draftId);
+						// that.deleteDraftRecord(oEvent);
+						that.deleteDraftRequestByDraftId(historicalRequestItem.draftId);
+						that.getAllUserRequestsNDetails();
 						dialog.close();
 					}
 				}),
@@ -954,6 +1018,8 @@ sap.ui.define([
 			var requestData = serReqModel.getData();
 			requestData.actionType = "D";
 			requestData.srStatusCode = "1";
+			requestData.requestedForEMail = requestData.ccEmail;
+			requestData.requestedForEMail1 ="satya@test.com";
 			var that = this;
 			// requestData.srStatusDesp = "Draft";
 			// requestData.netDueDate = (requestData.netDueDate) ? new Date (requestData.netDueDate) : "";
@@ -962,10 +1028,15 @@ sap.ui.define([
 			// console.log("Test ::createdDate:: before Save::"+ requestData.createdDate);
 		    var tempDate = (requestData.createdDate) ? requestData.createdDate : "";
 						
+
 			requestData.createdDate = Formatter.formatDateAsString((tempDate) ? tempDate : "");
+			//changed model name from UserInfo to userInfo for latest email fetch.
+			requestData.contactEmail = this.modelAssignment("userInfo").getProperty("/email");
+			requestData.requestedForEMail = this.getView().byId("requestedForCCEmail").getValue();
 			
-			requestData.contactEmail = this.modelAssignment("UserInfo").getProperty("/emailId");
-			// requestData.requestedForEMail = this.getView().byId("requestedForEmail").getValue();
+			
+			requestData.updatedById = this.modelAssignment("userInfo").getProperty("/email");
+			requestData.updatedByName = this.modelAssignment("userInfo").getProperty("/firstname");
 
 			this.loadBusyIndicator("resolutionCreate", true);
 
@@ -997,7 +1068,7 @@ sap.ui.define([
 			// requestData.netDueDate = (requestData.netDueDate)? Formatter.formatDateAString(requestData.netDueDate, "dd/MM/yyyy") : "";
 
 		},
-
+		
 		/**
 		 * On After Close Task
 		 */
@@ -1013,14 +1084,15 @@ sap.ui.define([
 				if (response[postElement.taskId]) {
 					Object.assign(postElement, response[postElement.taskId]);
 					if (postElement.status === "S") {
-						this.saveNSubmitServiceRequest(requestData, "", that, function (submitResponse) {
+						that.saveNSubmitServiceRequest(requestData, "", that, function (submitResponse) {
 							// that.modelAssignment("BillingReq").setProperty("/requestId", submitResponse.requestNo);
 							var message = "";
 							 if(requestData.isClarificationReq)
 							 {
 							 	message = "submitted."
 							 }
-							 else if(isClarifcation)
+							// else if(isClarifcation)
+							else if(postElement.actionType === "Reopen")
 							 {
 							 	message = "re opened."
 							 	
@@ -1075,23 +1147,36 @@ sap.ui.define([
 		onPressSubmit: function (oEvent) {
 
 			var actionSource = oEvent.getSource().data("actionSource");
+			var requestData = this.modelAssignment("oRequestData").getData();
 			if (actionSource === "Reopen Case" || actionSource === "Close Case") {
 				// Added By Samudra countComments >= countCommIncrease
 				if (!isClarifcation && actionSource === "Reopen Case") {
-					MessageBox.alert("Please enter comment under Clariifcation comment section before re opening the case", {
+					MessageBox.alert("Please enter comment under Clarification comment section before reopening the case", {
 						icon: MessageBox.Icon.WARNING,
 						title: "Re open Warning",
 						onClose: function () {
 
 						}
 					});
-				} else {
+				} 
+				
+				else {
+					isClarifcation=false;
 					this.closeMessageStrip();
 					this.confirmOnAction(actionSource);
 				}
 
 			} else {
-				if (this.validatePostData()) {
+				if(!isClarifcation && requestData.isClarificationReq ){
+					MessageBox.alert("Please enter comment under Clarification comment section before submitting the case", {
+						icon: MessageBox.Icon.WARNING,
+						title: "Clarification required Warning",
+						onClose: function () {
+
+						}
+					});
+				}
+			 else if (this.validatePostData()) {
 					// var requestData = this.modelAssignment("oRequestData").getData();
 					this.closeMessageStrip();
 					this.confirmOnAction("Submit");
@@ -1110,7 +1195,83 @@ sap.ui.define([
 			// }
 
 		},
+		onLogoutButtonPress: function() {
+		// var sLogoutUrl = "https://akarefw0s.accounts.ondemand.com/oauth2/logout?post_logout_redirect_uri=https://stengg-poc.launchpad.cfapps.us10.hana.ondemand.com/c616f202-f091-4f6c-bf5d-56caed51ab66.ptp-app.comstenggbtpptpui-0.0.1/index.html"; 
+		//var sClientId = "bb513758-f875-4824-9c23-90497185d37a"; // Replace with your actual client_id
+		//var sIdToken = this.getIdToken();  // Implement a method to retrieve the id_token
+	
+		// Construct the logout URL
+		//var sLogoutUrl = "https://akarefw0s.accounts.ondemand.com/oauth2/logout" +
+					//	 "?client_id=" + sClientId +
+					//	 "&post_logout_redirect_uri=https://stengg-poc.launchpad.cfapps.us10.hana.ondemand.com/c616f202-f091-4f6c-bf5d-56caed51ab66.ptp-app.comstenggbtpptpui-0.0.1/index.html";
+			// var sLogoutUrl ="https://akarefw0s.accounts.ondemand.com/oauth2/logout?client_id=64c7672a-905e-40a2-b48b-48a2b7df246a&response_type=code&post_logout_redirect_uri=https%3A%2F%2Fstengg-poc.authentication.us10.hana.ondemand.com%2Flogin%2Fcallback%2Fsap.custom";
+			var sClientId = "64c7672a-905e-40a2-b48b-48a2b7df246a";  // Replace with your actual client_id
+			var postLogoutRedirectUri = encodeURIComponent("https://akarefw0s.accounts.ondemand.com/oauth2/authorise?client_id=64c7672a-905e-40a2-b48b-48a2b7df246a");
+			// Construct the logout URL without response_type
+			var sLogoutUrl = "https://akarefw0s.accounts.ondemand.com/oauth2/logout" +
+							 "?client_id=" + sClientId +
+							 "&post_logout_redirect_uri=" + postLogoutRedirectUri;
+							 this.clearCookies();
+			// Redirect the user to the logout URL
+			window.location.href = sLogoutUrl;
+   
+		},
+		clearCookies: function() {
+			// Print all cookies for inspection
+			console.log("All Cookies: " + document.cookie);
+			
+			// Get all cookies from the current domain
+			var cookies = document.cookie.split(";");
+			
+			// If no cookies are found
+			if (cookies.length === 1 && cookies[0] === "") {
+				console.log("No cookies found for the current domain.");
+				return;
+			}
+			
+			// Iterate through all cookies and print them before clearing
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i];
+				var eqPos = cookie.indexOf("=");
+				var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+				
+				// Print the cookie name and value for debugging
+				console.log("Clearing cookie: " + name.trim());
+				
+				// Set the cookie expiration date to the past, effectively deleting it
+				document.cookie = name.trim() + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+			}
+		},
+		onLogout: function () {
 
+			var sClientId = "64c7672a-905e-40a2-b48b-48a2b7df246a";  // Replace with your actual client_id
+			const url1 = this.getBaseURL() + "/logout.html";
+			var postLogoutRedirectUri = encodeURIComponent("https://stengg-poc.launchpad.cfapps.us10.hana.ondemand.com/c616f202-f091-4f6c-bf5d-56caed51ab66.ptp-app.comstenggbtpptpui-0.0.1/logout.html");
+			// Construct the logout URL without response_type
+			var sLogoutUrl = "https://akarefw0s.accounts.ondemand.com/oauth2/logout" +
+							 "?client_id=" + sClientId +
+							 "&post_logout_redirect_uri=" + postLogoutRedirectUri;
+							// this.clearCookies();
+			// Redirect the user to the logout URL
+		//	window.location.href = sLogoutUrl;
+		window.location.replace('/my/logout');
+			
+			//sap.m.URLHelper.redirect(sLogoutUrl, false);
+		},
+
+
+		onLogoutPress: function () {
+            
+            var iasLogoutUrl = this.getBaseURL() + "/do/logout"
+   
+            // Redirect to the IAS logout endpoint 
+			sap.m.URLHelper.redirect(iasLogoutUrl, false);
+         },
+
+		getIdToken: function() {
+			// Assuming the id_token is stored in local storage or session storage after login
+			return localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+		},
 		/** 
 		 * Show error message after validation in Message Popover
 		 * @param messageElementArray
@@ -1122,7 +1283,7 @@ sap.ui.define([
 			$.each(messageElementArray, function (i) {
 				messageElement = {};
 				messageElement.title = messageElementArray[i];
-				messageElement.message = messageElementArray[i];
+			//	messageElement.message = messageElementArray[i];
 				messageElement.type = sap.ui.core.MessageType.Error;
 				messageModelData.push(messageElement);
 			});
@@ -1141,7 +1302,7 @@ sap.ui.define([
 			// Setting Net Due Date , Contact Email & requestedForEmail explicitly
 			requestData.netDueDate = (requestData.netDueDate) ? new Date(requestData.netDueDate) : "";
 			// requestData.netDueDate = new Date(this.getView().byId("DP1").getValue());
-			requestData.contactEmail = this.modelAssignment("UserInfo").getProperty("/emailId");
+			requestData.contactEmail = this.modelAssignment("userInfo").getProperty("/email");
 			requestData.requestedForEMail = this.modelAssignment("oRequestData").getProperty("/requestedForEMail");
 
 			if (!requestData.srCategoryDesp) {
@@ -1150,7 +1311,7 @@ sap.ui.define([
 			} else if (requestData.srCategoryCode === "PayPO" || requestData.srCategoryCode === "InvRel" ||
 				requestData.srCategoryCode === "Contra") {
 				if (!requestData.invoiceNo1) {
-					message.push("Please enter alteast one Invoice Value");
+					message.push("Please enter at least one Invoice Value");
 					status++;
 				}
 			}
@@ -1161,7 +1322,7 @@ sap.ui.define([
 				}
 			}
 			if (!requestData.srDetails) {
-				message.push("Please enter Service Details");
+				message.push("Please enter 'Please provide details of your query'");
 				status++;
 			}
 			// if (!requestData.sectorCode) {
@@ -1169,11 +1330,11 @@ sap.ui.define([
 			// 	status++;
 			// }
 			if (!requestData.entityCode) {
-				message.push("Please select Entity for Request");
+				message.push("Please select 'Entity Name'");
 				status++;
 			}
 			if (!requestData.vendorName) {
-				message.push("Please enter Vendor Name in full");
+				message.push("Please enter 'Your Company's Name'");
 				status++;
 			}
 			this.modelAssignment("oMessageModel").setData(message);
@@ -1230,6 +1391,8 @@ sap.ui.define([
 		handleSubmit: function (isUpload, actionType) {
 			var requestData = this.modelAssignment("oRequestData").getData();
 			requestData.actionType = "S";
+			// requestData.requestedForEMail=this.modelAssignment("")
+			requestData.requestedForEMail=requestData.ccEmail;
 			requestData.srStatusCode = (requestData.isPendingClose && actionType === "Close Case") ? "7" : "2";
 			if(requestData.srStatusCode==="2")
 			{
@@ -1488,13 +1651,14 @@ sap.ui.define([
 			var commentData = oRequestDataModel.getProperty("/clarificationCommentList");
 			// create new entry
 			var sValue = oEvent.getParameter("value");
-			var loggedInDetails = this.modelAssignment("UserInfo").getData();
+			var loggedInDetails = this.modelAssignment("userInfo").getData();
 			sValue = sValue.trim();
 			var sDate = Formatter.formatDateAsString(null, "yyyy-MM-dd hh:MM");
 			var displayDate = Formatter.formatDateAsString(sDate, "dd/MM/yyyy hh:MM");
 			var oEntry = {
-				"userId": loggedInDetails.loginId,
-				"userName": loggedInDetails.fullName,
+			//	"userId": loggedInDetails.loginId,
+				"userId": loggedInDetails.email,
+				"userName": loggedInDetails.fullname,
 				"comments": sValue,
 				"commentDate": sDate,
 				"commentDisplayDate": displayDate,
@@ -1574,7 +1738,7 @@ sap.ui.define([
 				// code for IE6, IE5
 				http = new ActiveXObject("Microsoft.XMLHTTP");
 			}
-			http.open("GET", "/poutil/rest/File/download/" + selectedAttachment.projectType + "/" + selectedAttachment.requestNo + "/" +
+			http.open("GET", "/c616f202-f091-4f6c-bf5d-56caed51ab66.ptp-app.comstenggbtpptpui-0.0.1/poutil/rest/File/download/" + selectedAttachment.projectType + "/" + selectedAttachment.requestNo + "/" +
 				selectedAttachment.fileName, true);
 			http.responseType = "blob";
 			http.onload = function () { //Call a function when the state changes.
@@ -1620,7 +1784,7 @@ sap.ui.define([
 			var requestData = this.modelAssignment("oRequestData").getData();
 			var darftId = requestData.draftId;
 			var fU = this.getUIControl("fileUploader");
-			if (requestData.docType) {
+ // if (requestData.docType) {
 				if (fU.getProperty("value")) {
 					if (darftId) {
 						var requestObject = {
@@ -1687,9 +1851,10 @@ sap.ui.define([
 				} else {
 					MessageBox.error("Please select a file to upload");
 				}
-			} else {
-				MessageBox.error("Please select a valid Document Type");
-			}
+		//	} 
+		//	else {
+			//	MessageBox.error("Please select a valid Document Type");
+		//	}
 		},
 		checkNumber: function (oEvent) {
 			var value = oEvent.getSource().getValue();
@@ -1699,6 +1864,8 @@ sap.ui.define([
 			}
 			oEvent.getSource().setValue(this.sNumber);
 		},
+		
+
 		/**
 		 * Fetch control
 		 */

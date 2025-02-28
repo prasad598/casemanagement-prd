@@ -17,6 +17,7 @@ sap.ui.define([],
 				
 				saveNSubmitRequestUrl: "/poutil/rest/PTP/createServiceRequest",
 				serviceRequestsUrl: "/poutil/rest/PTP/retrieveServiceRequestByRequestor",
+				serviceRequestsUrl1: "/poutil/rest/PTP/retrieveServiceRequestByRequestorId/",
 				loadUserConfigUrl: "/poutil/rest/OTC/retrieveUserMapping/R",
 				notificationRequestDeleteUrl: "/poutil/rest/OTC/deleteNotificationRequest/",
 				deleteDraftRequest : "/poutil/rest/PTP/deleteServiceRequestDataByDraftId/",

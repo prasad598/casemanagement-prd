@@ -1,19 +1,36 @@
-<core:FragmentDefinition
-    xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:layout="sap.ui.layout"
-    xmlns:uf="sap.ui.unified"
-    xmlns:f="sap.ui.layout.form"
-    xmlns:u="sap.uxap"
-    xmlns:month="sap.ui.unified.calendar"
->
-    <f:SimpleForm
-        layout="ResponsiveLayout"
-        labelSpanL="2"
-        editable="true"
-        maxContainerCols="2"
-    >
-        <f:content>
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uf="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.uxap" xmlns:month="sap.ui.unified.calendar" xmlns:tnt="sap.tnt">
+	<u:ObjectPageLayout enableLazyLoading="true" useIconTabBar="true" showTitleInHeaderContent="false">
+	<!--	<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="{oRequestData>/draftId}  {oRequestData>/requestId}" objectImageURI="sap-icon://SAP-icons-TNT/user"
+				objectImageShape="Circle" isObjectIconAlwaysVisible="false"></u:ObjectPageHeader>
+		</u:headerTitle> -->
+		<u:headerContent>
+			<layout:VerticalLayout width="20%">
+				<Label text="Created By"/>
+				<!--	<Text text="{userInfo>/displayName}"/> -->
+                <Text text="{userInfo>/fullname}"/>
+				<Label text="Contact Number"/>
+				<Input value ="{oRequestData>/contactNumber}" maxLength="12" liveChange="checkNumber"/>
+				<Label text="Creation Date"/>
+				<Text text="{oRequestData>/submissionDateDisplay}"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+			<layout:VerticalLayout width="30%">
+				<Label text="Email Id"/>
+				<Text text="{userInfo>/email}"/>
+				<Label text="Status"/>
+				<Text text= "{= ${oRequestData>/srStatusDesp} === undefined ? 'Draft' : ${oRequestData>/srStatusDesp} }"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+		</u:headerContent>
+		<u:sections>
+			<u:ObjectPageSection title="{i18n>Billing.Section.Details}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="">
+						<u:blocks>
+							<f:SimpleForm layout="ResponsiveLayout" labelSpanL="2" editable="true" maxContainerCols="2">
+								<f:content>
             <core:Title text="Service Request Details" />
             <Label
                 text="Service Request category"
@@ -62,7 +79,7 @@
             <Label
                 id="invoiceNoLbl"
                 text="Invoice No"
-                required="false"
+                required="true"
             />
             <Input
                 id="invoiceNoId"
@@ -125,7 +142,7 @@
                 />
             </Select>
              <Label
-                text="Vendor Name"
+                text="Your Company's Name"
                 required="true"
             />
             <Input
@@ -223,20 +240,20 @@
                 value="{oRequestData>/requestedForName}"
                 enabled="{oReadOnlyModel>/isFieldEnabled}"
             />-->
-            <Label text="Sender email" required="true" />
+           <!-- <Label text="Sender email" required="true" />
             <Input
                 id="requestedForEmail"
                 maxLength="100"
                 showValueHelp="false"
                 value="{oRequestData>/requestedForEMail}"
                 enabled="{oReadOnlyModel>/isFieldEnabled}"
-            />
+            /> -->
               <Label text="CC email" />
             <Input
                 id="requestedForCCEmail"
                 maxLength="100"
                 showValueHelp="false"
-                value="{oRequestData>/requestedForCCEMail}"
+                value="{oRequestData>/ccEmail}"
                 enabled="{oReadOnlyModel>/isFieldEnabled}"
             />
            <!-- <Label text="Requested For (Contact)" />
@@ -248,64 +265,105 @@
                 enabled="{oReadOnlyModel>/isFieldEnabled}"
             />-->
         </f:content>
-       
-    </f:SimpleForm>
-    <layout:VerticalLayout width="100%">
-                                <layout:content>
-                                    <HBox alignItems="Center" alignContent="Center">
-                                   
-                                    <Label text="Select Document Type" class="sapUiSmallMarginBegin"/>
-                                    <Select selectedKey="{oRequestData>/docType}" change="handleDocTypeChange">
-                                        <core:Item key="" text=""/>
-                                        <core:Item key="SOA" text="Statement of Account (SOA)"/>
-                                        <core:Item key="AuditConfirmation" text="Audit Confirmation"/>
-                                        <core:Item key="Invoices" text="List of Invoices"/>
-                                        <core:Item key="Others" text="Others"/>
-                                    </Select>
-                                   
-                                   
+							</f:SimpleForm>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection id="Attachments" title="Attachments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<!--<Title class="h2Title" text="Upload Supporting Documents"/>-->
+									<Label text="Select Document"/>
+                                    
+								<!--	<Select selectedKey="{oRequestData>/docType}" change="handleDocTypeChange">
+										<core:Item key="" text=""/>
+										<core:Item key="SOA" text="Statement of Account (SOA)"/>
+										<core:Item key="AuditConfirmation" text="Audit Confirmation"/>
+										<core:Item key="Invoices" text="List of Invoices"/>
+										<core:Item key="Others" text="Others"/>
+									</Select> -->
+									<Label/>
+                                    <tnt:InfoLabel id="il1" text="Please upload PDF/Excel Only" renderMode="Narrow" colorScheme="6"/>
+									<HBox>
+									<!--	<uf:FileUploader id="fileUploader" style="Default" placeholder="Select File"/> -->
                                         <uf:FileUploader id="fileUploader" style="Default" placeholder="Select File" typeMissmatch="typeMissmatch" fileType="xlsx,pdf"/>
-                                        <Button icon="sap-icon://upload" press="handleUploadPress"/>
-                                    </HBox>
-                                   
-                                    <Table items="{oRequestData>/attachmentList}">
-                                        <columns>
-                                            <Column>
-                                                <Text text="File Name"/>
-                                            </Column>
-                                            <Column>
-                                                <Text text="Document Type"/>
-                                            </Column>
-                                            <Column>
-                                                <Text text="Type"/>
-                                            </Column>
-                                            <Column>
-                                                <Text text="Created Date"/>
-                                            </Column>
-                                            <Column>
-                                                <Text text="Download"/>
-                                            </Column>
-                                            <Column>
-                                                <Text text="Delete"/>
-                                            </Column>
-                                        </columns>
-                                        <items>
-                                            <ColumnListItem>
-                                                <cells>
-                                                    <Text text="{oRequestData>fileName}" wrapping="true"/>
-                                                    <Text text="{oRequestData>documentType}"/>
-                                                    <Text text="{oRequestData>mimeType}" wrapping="true"/>
-                                                    <Text text="{oRequestData>attachmentDateDisplay}"/>
-                                                    <Button icon="sap-icon://download" text="" press="onPressAttachmentDownload" type="Default"/>
-                                                    <Button icon="sap-icon://delete" enabled="{oRequestData>isFieldEnabled}" text="" press="onPressDeleteAttachment" type="Default"/>
-                                                </cells>
-                                            </ColumnListItem>
-                                        </items>
-                                    </Table>
-                                </layout:content>
-                            </layout:VerticalLayout>
-     
- 
-   
- 
+										<Button icon="sap-icon://upload" press="handleUploadPress"/>
+									</HBox>
+									<!--<VBox>
+										<CheckBox text="Email to Customer" selected="{NotificationReq>/isEmailCustomerSelected}" select="onSelectEmailCustomer"/>
+										<MultiInput id="emailMInputId" placeholder="Insert Email Addresses" change="onEnterCustomerEmail" showValueHelp="false"
+											visible="{ReadOnlyModel>/isEmailCustomerVisible}"></MultiInput>
+									</VBox>-->
+									<!--	<CheckBox text="Email back to Requestor"/>
+									<CheckBox text="Mail Hardcopy"/>
+									<VBox>
+										<CheckBox text="Upload to Customer's portal" select="onSelectUploadCustomerPortal"/>
+										<Input width="50%" value="{NotificationReq>/customerPortal}" placeholder="Portal Address" visible="{ReadOnlyModel>/isUploadCustomerVisible}"/>
+									</VBox>-->
+									<Table items="{oRequestData>/attachmentList}">
+										<columns>
+											<Column>
+												<Text text="File Name"/>
+											</Column>
+											<Column>
+												<Text text="Document Type"/>
+											</Column>
+											<Column>
+												<Text text="Type"/>
+											</Column>
+											<Column>
+												<Text text="Created Date"/>
+											</Column>
+											<Column>
+												<Text text="Download"/>
+											</Column>
+											<Column>
+												<Text text="Delete"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem>
+												<cells>
+													<Text text="{oRequestData>fileName}" wrapping="true"/>
+													<Text text="{oRequestData>documentType}"/>
+													<Text text="{oRequestData>mimeType}" wrapping="true"/>
+												    <Text text="{oRequestData>attachmentDateDisplay}"/>
+													<Button icon="sap-icon://download" text="" press="onPressAttachmentDownload" type="Default"/>
+													<Button icon="sap-icon://delete" enabled="{oRequestData>isFieldEnabled}" text="" press="onPressDeleteAttachment" type="Default"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection title="Comments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<Title class="sapMTitle sapMTitleStyleH6"
+										text="Add additional information for Payment and Reso Team. Click on Arrow key to add your comments"/>
+									<!--<Title text="Add additional information for Payment & Reso Team. Click on Arrow key to add your comments."/>-->
+									<FeedInput class="sapUiSmallMarginTopBottom" growing="true" rows = "2" maxLength="5000" post="onPostComment" showIcon="false"/>
+									<List growing="true" growingThreshold="4" items="{oRequestData>/clarificationCommentList}" showSeparators="Inner">
+										<FeedListItem icon="{userInfo>/userImage}" iconDensityAware="false" info="{oRequestData>userType}" sender="{userInfo>/fullname}"
+											text="{oRequestData>comments}" timestamp="{ path: 'oRequestData>commentDisplayDate' }"/>
+									</List>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+		</u:sections>
+	</u:ObjectPageLayout>
 </core:FragmentDefinition>

@@ -1,11 +1,18 @@
 {
   "welcomeFile": "/index.html",
   "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/do/logout",
+    "logoutPage": "/index.html",
+    "logoutMethod":"GET"
+  },
+ 
   "routes": [
+    
     {
       "source": "^/poutil/(.*)$",
       "target": "/poutil/$1",
-      "destination": "podevtu",
+      "destination": "poqatu",
       "authenticationType": "none",
       "csrfProtection": false
     },
@@ -22,10 +29,23 @@
       "destination": "ui5"
     },
     {
+      "source": "^/user-api/currentUser$",
+      "target": "/currentUser",
+      "service": "sap-approuter-userapi"
+    },
+    {
+      "source": "^/api/(.*)$",
+      "target": "/api/$1",
+      "destination": "srv-api",
+      "authenticationType": "xsuaa"
+    },
+    {
       "source": "^(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "authenticationType": "xsuaa",
+      "cacheControl": "no-cache, no-store, must-revalidate"
     }
+      
   ]
 }

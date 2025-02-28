@@ -9,274 +9,424 @@
     xmlns:u="sap.uxap"
     xmlns:tnt="sap.tnt"
 >
-    <NavContainer
-        id="notificationNav"
-        height="100%"
-        width="100%"
-    >
-        <Page
-            id="searchPage"
-            title="{i18n>title}" showHeader="false"
-        >
-            <Table
-                id="All"
-                inset="false"
-                itemPress="onPressViewRequest"
-                items="{ path: 'RequestorInfo>/requestList', sorter: { path: 'createdDate',descending: true} }"
-            >
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <content>
-                            <Title
-                                text="{i18n>title}"
-                                level="H2"
-                            />
-                            <ToolbarSpacer />
-                            <Button
-                                icon="sap-icon://refresh"
-                                class="sapUiSmallMarginBottom"
-                                text=""
-                                press="onRefreshButtonPress"
-                                type="Default"
-                            />
-                        </content>
-                    </OverflowToolbar>
-                </headerToolbar>
-
-                <columns>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text text="Service Request Number" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text text="Service Request Category" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                    >
-                        <Text text="Entity Name" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                    >
-                        <Text text="Vendor Name" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text text="Created Date" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text text="Status" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text text="Priority" />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        width="3em"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        width="3em"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        width="3em"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        width="3em"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text />
-                    </Column>
-                    <Column
-                        minScreenWidth="Tablet"
-                        width="3em"
-                        demandPopin="true"
-                        hAlign="Center"
-                    >
-                        <Text />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem
-                        type="Active"
-                        press="onSelectRequest"
-                    >
-                        <cells>
-                            <ObjectIdentifier
-                                title="{RequestorInfo>draftDisplay}" textDirection="LTR" 
-                            />
-                            <Text text="{RequestorInfo>srCategoryDesp}" />
-                            <Text text="{RequestorInfo>entityName}" />
-                            <Text text="{RequestorInfo>vendorName}" />
-                            <Text
-                                text="{RequestorInfo>submissionDateDisplay}"
-                            />
-                            <tnt:InfoLabel
-                                text="{RequestorInfo>srStatusDesp}"
-                                tooltip="{RequestorInfo>srStatusDesp}"
-                                colorScheme="{RequestorInfo>statusColorScheme}"
-                                wrapping="false"
-                                displayOnly="true"
-                            />
-
-                            <Text text="{RequestorInfo>priorityDesc}" />
-                            <Button
-                                icon="sap-icon://edit"
-                                tooltip="Provide Clarification"
-                                visible="{RequestorInfo>isClarificationReq}"
-                                press="editDraftRequest"
-                                type="Transparent"
-                            >
-                                <layoutData>
-                                    <FlexItemData growFactor="1" />
-                                </layoutData>
-                                <customData>
-                                    <core:CustomData
-                                        key="target"
-                                        value="resolutionCreate"
-                                    />
-                                    <core:CustomData
-                                        key="actionSource"
-                                        value="LandingPage"
-                                    />
-                                </customData>
-                            </Button>
-                            <Button
-                                icon="sap-icon://accept"
-                                tooltip="Close/Open Case"
-                                visible="{RequestorInfo>isPendingClose}"
-                                press="editCloseCase"
-                                type="Transparent"
-                            >
-                                <layoutData>
-                                    <FlexItemData growFactor="1" />
-                                </layoutData>
-                                <customData>
-                                    <core:CustomData
-                                        key="target"
-                                        value="resolutionCreate"
-                                    />
-                                    <core:CustomData
-                                        key="actionSource"
-                                        value="LandingPage"
-                                    />
-                                </customData>
-                            </Button>
-                            <Button
-                                icon="sap-icon://edit"
-                                press="editDraftRequest"
-                                tooltip="Edit Draft"
-                                visible="{RequestorInfo>isDeleteVisible}"
-                            >
-                                <layoutData>
-                                    <FlexItemData growFactor="1" />
-                                </layoutData>
-                                <customData>
-                                    <core:CustomData
-                                        key="target"
-                                        value="resolutionCreate"
-                                    />
-                                    <core:CustomData
-                                        key="actionSource"
-                                        value="LandingPage"
-                                    />
-                                </customData>
-                            </Button>
-                            <Button
-                                icon="sap-icon://delete"
-                                press="deleteDraftRequest"
-                                tooltip="Delete Draft"
-                                visible="{RequestorInfo>isDeleteVisible}"
-                            >
-                                <layoutData>
-                                    <FlexItemData growFactor="1" />
-                                </layoutData>
-                                <customData>
-                                    <!--<core:CustomData key="target" value="resolutionCreate"/>-->
-                                    <core:CustomData
-                                        key="actionSource"
-                                        value="LandingPage"
-                                    />
-                                </customData>
-                            </Button>
-                            <Button
-                                icon="sap-icon://sys-cancel-2"
-                                press="onPressCancelRequest"
-                                tooltip="Cancel Request"
-                                visible="{RequestorInfo>cancelVisible}"
-                            />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-
-            <footer>
-                <OverflowToolbar>
-                    <ToolbarSpacer />
-                    <Button
-                        icon="sap-icon://write-new"
-                        press="onPressCreateNewRequest"
-                        text="Create Service Request"
-                        type="Emphasized"
-                    />
-                </OverflowToolbar>
-            </footer>
-        </Page>
-        <Page
-            id="resolutionCreate"
-            title="{i18n>UserProfile.Page.Title}"
-            busy="{EmployeeData>/isBusy}"
-        >
-            <customHeader>
+    		<NavContainer id="notificationNav" height="100%" width="100%">
+				<Page id="searchPage" title="Service Request Form" showHeader="true">
+				<customHeader>
                 <Toolbar>
-                    <Button
-                        icon="sap-icon://nav-back"
-                        press="onPressBack"
-                    />
-                    <ToolbarSpacer />
-                    <Image
-                        class="imageCss sapUiSmallMarginEnd"
-                        densityAware="false"
-                    />
-                </Toolbar>
-            </customHeader>
-            <content>
+                    <ImageContent
+		class="sapUiLargeMarginTop sapUiLargeMarginBottom sapUiLargeMarginBegin"
+		src="images/STE3.png"
+		description="Logo"
+		press="press">
+	</ImageContent>
+	<ToolbarSpacer/>
+	<Title level="H4" text="Finance AP Service Management" />
+
+	<ToolbarSpacer/>
+	 <Button icon="sap-icon://log" class="sapUiSmallMarginBottom" text="Logout" press="onLogoutPress" type="Default"/>  
+             <!--  <Button text="Logout" class="sapUiSmallMarginBottom"  press="onLogoutButtonPress" type="Default"/> -->
+			    </Toolbar>
+        
+		    </customHeader>
+			<!--Created warning banner for system maintenance by satya-->
+			 <MessageStrip
+                text="{maintenance>/message}"
+                type="Warning"
+                showIcon="true"
+                visible="{maintenance>/isWarningActive}"
+                class="sapUiSmallMargin sapUiResponsiveMargin"/>
+					<!--Created warning banner for system maintenance by satya-->
+					<content>
+						<ObjectHeader icon="{UserInfo>/userImage}" iconAlt="{userInfo>/firstname} {userInfo>/lastname}" title="{userInfo>/firstname} {userInfo>/lastname}  ({userInfo>/email})"
+							titleActive="false" backgroundDesign="Translucent" condensed="false" visible="true" responsive="true" fullScreenOptimized="true">
+							<headerContainer>
+								<IconTabBar id="itb1" selectedKey="key3" upperCase="false" class="sapUiResponsiveContentPadding" select="onSelectIconFilter">
+									<items>
+										<IconTabFilter showAll="true" count="{RequestorInfo>/count}" text="Service Requests" key="All">
+											<Table id="All" inset="false" 
+										
+													items="{ path: 'RequestorInfo>/requestList' }">
+												<headerToolbar>
+													<OverflowToolbar>
+														<content>
+															<Title text="All Service Requests" level="H2"/>
+															<tnt:InfoLabel id="il2" text="Please press Ctrl+F to activate search by Service Request Number or any other keyword" renderMode="Narrow" colorScheme="6"/>
+															<ToolbarSpacer/>
+
+
+
+															<Button icon="sap-icon://refresh" class="sapUiSmallMarginBottom" text="" press="onRefreshButtonPress" type="Default"/>
+															<!--<DateRangeSelection delimiter="to" dateValue="{path:'SearchModel>/fromDate'}" secondDateValue="{path:'SearchModel>/toDate'}"-->
+															<!--	displayFormat="dd/MM/yyyy" change="onChangeFilterOnDate" width="14em" placeholder="Filter by Date Range"/>-->
+														</content>
+													</OverflowToolbar>
+												</headerToolbar>
+												<!--<infoToolbar>-->
+												<!--	<Toolbar active="true">-->
+												<!--		<Label text="Available Service Requests"/>-->
+												<!--	</Toolbar>-->
+												<!--</infoToolbar>-->
+												<columns>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Number"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Category"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Entity Name"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Vendor Name"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Created Date"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Status"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center" visible="false">
+														<Text text="Priority"/>
+													</Column>
+													<Column minScreenWidth="Tablet" width="3em" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+													<Column minScreenWidth="Tablet" width="3em" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+													<Column minScreenWidth="Tablet" width="3em" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+													<Column minScreenWidth="Tablet" width="3em" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+													<Column minScreenWidth="Tablet" width="3em" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem type="Active" press="onSelectRequest">
+														<cells>
+															<ObjectIdentifier title="{RequestorInfo>draftDisplay}"/>
+															<Text text="{RequestorInfo>srCategoryDesp}"/>
+															<Text text="{RequestorInfo>entityName}"/>
+															<Text text="{RequestorInfo>vendorName}"/>
+															<Text text="{RequestorInfo>submissionDateDisplay}"/>
+															<tnt:InfoLabel text="{RequestorInfo>srStatusDesp}" tooltip="{RequestorInfo>srStatusDesp}" colorScheme="{RequestorInfo>statusColorScheme}" wrapping="false" displayOnly="true"/>
+															<!--<HBox>-->
+															<!--	<Button icon="sap-icon://SAP-icons-TNT/receive-task" tooltip="Requested via email" visible="true" press="displayServiceR"-->
+															<!--		type="Approve"/>-->
+															<!--	<Button icon="sap-icon://edit" tooltip="Edit Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressEditRequest"-->
+															<!--		type="Transparent"/>-->
+															<!--	<Text width="0.2em"/>-->
+															<!--	<Button icon="sap-icon://delete" tooltip="Delete Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressDeleteRequest"-->
+															<!--		type="Reject"/>-->
+															<!--   <Button icon="sap-icon://feedback" tooltip="Service Rating" visible="true" press="onPressServiceRating"-->
+															<!--		type="Approve"/>-->
+															<!--</HBox>-->
+															<Text text="{RequestorInfo>priorityDesc}" visible="false"/>
+															<Button icon="sap-icon://edit" tooltip="Provide Clarification" visible="{RequestorInfo>isClarificationReq}" press="editDraftRequest"
+																type="Transparent">
+																<layoutData>
+																	<FlexItemData growFactor="1"/>
+																</layoutData>
+																<customData>
+																	<core:CustomData key="target" value="resolutionCreate"/>
+																	<core:CustomData key="actionSource" value="LandingPage"/>
+																</customData>
+															</Button>
+															<Button icon="sap-icon://accept" tooltip="Close/Open Case" visible="{RequestorInfo>isPendingClose}" press="editCloseCase" type="Transparent">
+																<layoutData>
+																	<FlexItemData growFactor="1"/>
+																</layoutData>
+																<customData>
+																	<core:CustomData key="target" value="resolutionCreate"/>
+																	<core:CustomData key="actionSource" value="LandingPage"/>
+																</customData>
+															</Button>
+															<Button icon="sap-icon://edit" press="editDraftRequest" tooltip="Edit Draft" visible="{RequestorInfo>isDeleteVisible}">
+																<layoutData>
+																	<FlexItemData growFactor="1"/>
+																</layoutData>
+																<customData>
+																	<core:CustomData key="target" value="resolutionCreate"/>
+																	<core:CustomData key="actionSource" value="LandingPage"/>
+																</customData>
+															</Button>
+															<Button icon="sap-icon://delete" press="deleteDraftRequest" tooltip="Delete Draft" visible="{RequestorInfo>isDeleteVisible}">
+																<layoutData>
+																	<FlexItemData growFactor="1"/>
+																</layoutData>
+																<customData>
+																	<!--<core:CustomData key="target" value="resolutionCreate"/>-->
+																	<core:CustomData key="actionSource" value="LandingPage"/>
+																</customData>
+															</Button>
+															<Button icon="sap-icon://sys-cancel-2" press="onPressCancelRequest" tooltip="Cancel Request" visible="{RequestorInfo>cancelVisible}"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+										</IconTabFilter>
+										<IconTabFilter icon="sap-icon://hint" text="Draft" count="{RequestorInfo>/draftCount}" key="Draft" tooltip="Drafts" iconColor="Neutral">
+											<Table id="Draft" inset="false" itemPress="onPressViewRequest"
+												items="{ path: 'RequestorInfo>/requestList'}">
+												
+												<headerToolbar>
+													<OverflowToolbar>
+														<content>
+															<Title text="Service Requests" level="H2"/>
+															<ToolbarSpacer/>
+															<Button icon="sap-icon://refresh" class="sapUiSmallMarginBottom" text="" press="onRefreshButtonPress" type="Default"/>
+															<!--<DateRangeSelection delimiter="to" dateValue="{path:'SearchModel>/fromDate'}" secondDateValue="{path:'SearchModel>/toDate'}"-->
+															<!--	displayFormat="dd/MM/yyyy" change="onChangeFilterOnDate" width="14em" placeholder="Filter by Date Range"/>-->
+														</content>
+													</OverflowToolbar>
+												</headerToolbar>
+												<!--<infoToolbar>-->
+												<!--	<Toolbar active="true">-->
+												<!--		<Label text="Available Service Requests"/>-->
+												<!--	</Toolbar>-->
+												<!--</infoToolbar>-->
+												<columns>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Number"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Category"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Entity Name"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Vendor Name"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Created Date"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Status"/>
+													</Column>
+													
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Priority"/>
+													</Column>
+													
+													<!--<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">-->
+													<!--	<Text text="Priority"/>-->
+													<!--</Column>-->
+													<!--<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">-->
+													<!--	<Text/>-->
+													<!--</Column>-->
+												</columns>
+												<items>
+													<ColumnListItem type="Active" press="onSelectRequest">
+														<cells>
+															<ObjectIdentifier title="{RequestorInfo>draftDisplay}"/>
+															<Text text="{RequestorInfo>srCategoryDesp}"/>
+															<Text text="{RequestorInfo>entityName}"/>
+															<Text text="{RequestorInfo>vendorName}"/>
+															<Text text="{RequestorInfo>submissionDateDisplay}"/>
+															<tnt:InfoLabel text="{RequestorInfo>srStatusDesp}" colorScheme="{RequestorInfo>statusColorScheme}" width="140px" displayOnly="true"/>
+															<Text text="{RequestorInfo>priorityDesc}"/>
+															<HBox>
+																<Button icon="sap-icon://edit" press="editDraftRequest" type="Emphasized">
+																	<layoutData>
+																		<FlexItemData growFactor="1"/>
+																	</layoutData>
+																	<customData>
+																		<core:CustomData key="target" value="resolutionCreate"/>
+																		<core:CustomData key="actionSource" value="DraftPage"/>
+																	</customData>
+																</Button>
+																<Button icon="sap-icon://delete" press="deleteDraftRequest" type="Emphasized">
+																	<layoutData>
+																		<FlexItemData growFactor="1"/>
+																	</layoutData>
+																	<customData>
+																		<!--<core:CustomData key="target" value="resolutionCreate"/>-->
+																		<core:CustomData key="actionSource" value="DraftPage"/>
+																	</customData>
+																</Button>
+															</HBox>
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+										</IconTabFilter>
+										<IconTabFilter icon="sap-icon://process" count="{RequestorInfo>/inProgressCount}" key="InProcess" text="In Process" tooltip="In Process">
+											<Table id="InProcess" inset="false" itemPress="onPressViewRequest"
+												 items="{ path: 'RequestorInfo>/requestList'}">  
+	                                            
+												<headerToolbar>
+													<OverflowToolbar>
+														<content>
+															<Title text="Service Requests" level="H2"/>
+															<ToolbarSpacer/>
+															<Button icon="sap-icon://refresh" class="sapUiSmallMarginBottom" text="" press="onRefreshButtonPress" type="Default"/>
+															<!--<DateRangeSelection delimiter="to" dateValue="{path:'SearchModel>/fromDate'}" secondDateValue="{path:'SearchModel>/toDate'}"-->
+															<!--	displayFormat="dd/MM/yyyy" change="onChangeFilterOnDate" width="14em" placeholder="Filter by Date Range"/>-->
+														</content>
+													</OverflowToolbar>
+												</headerToolbar>
+												<!--<infoToolbar>-->
+												<!--	<Toolbar active="true">-->
+												<!--		<Label text="Available Service Requests"/>-->
+												<!--	</Toolbar>-->
+												<!--</infoToolbar>-->
+												<columns>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Number"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Category"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Entity Name"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Vendor Name"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Created Date"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Status"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Priority"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem type="Active" press="onSelectRequest">
+														<cells>
+															<ObjectIdentifier title="{RequestorInfo>draftDisplay}"/>
+															<Text text="{RequestorInfo>srCategoryDesp}"/>
+															<Text text="{RequestorInfo>entityName}"/>
+															<Text text="{RequestorInfo>vendorName}"/>
+															<Text text="{RequestorInfo>submissionDateDisplay}"/>
+															<tnt:InfoLabel text="{RequestorInfo>srStatusDesp}" colorScheme="{RequestorInfo>statusColorScheme}" width="140px" displayOnly="true"/>
+															<Text text="{RequestorInfo>priorityDesc}"/>
+															<!--<HBox>-->
+															<!--	<Button icon="sap-icon://SAP-icons-TNT/receive-task" tooltip="Requested via email" visible="true" press="displayServiceR"-->
+															<!--		type="Approve"/>-->
+															<!--	<Button icon="sap-icon://edit" tooltip="Edit Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressEditRequest"-->
+															<!--		type="Transparent"/>-->
+															<!--	<Text width="0.2em"/>-->
+															<!--	<Button icon="sap-icon://delete" tooltip="Delete Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressDeleteRequest"-->
+															<!--		type="Reject"/>-->
+															<!--   <Button icon="sap-icon://feedback" tooltip="Service Rating" visible="true" press="onPressServiceRating"-->
+															<!--		type="Approve"/>-->
+															<!--</HBox>-->
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+										</IconTabFilter>
+										<!--<IconTabFilter icon="sap-icon://SAP-icons-TNT/receive-task" count="{RequestorInfo>/invoiceCount}" tooltip="Invoice generated" text="CC EMAIL"-->
+										<!--	iconColor="Contrast"></IconTabFilter>-->
+										<IconTabFilter icon="sap-icon://sys-enter-2" count="{RequestorInfo>/completeCount}" key="Completed" tooltip="Service Request generated"
+											text="Completed" iconColor="Positive">
+											<Table id="Completed" inset="false" itemPress="onPressViewRequest"
+												items="{ path: 'RequestorInfo>/requestList'}">
+												<headerToolbar>
+													<OverflowToolbar>
+														<content>
+															<Title text="Service Requests" level="H2"/>
+															<ToolbarSpacer/>
+															<Button icon="sap-icon://refresh" class="sapUiSmallMarginBottom" text="" press="onRefreshButtonPress" type="Default"/>
+															<!--<DateRangeSelection delimiter="to" dateValue="{path:'SearchModel>/fromDate'}" secondDateValue="{path:'SearchModel>/toDate'}"-->
+															<!--	displayFormat="dd/MM/yyyy" change="onChangeFilterOnDate" width="14em" placeholder="Filter by Date Range"/>-->
+														</content>
+													</OverflowToolbar>
+												</headerToolbar>
+												<!--<infoToolbar>-->
+												<!--	<Toolbar active="true">-->
+												<!--		<Label text="Available Service Requests"/>-->
+												<!--	</Toolbar>-->
+												<!--</infoToolbar>-->
+												<columns>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Number"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+														<Text text="Service Request Category"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Entity Name"/>
+													</Column>
+													<Column minScreenWidth="Tablet" demandPopin="true">
+														<Text text="Vendor Name"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Created Date"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Status"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text text="Priority"/>
+													</Column>
+													<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+														<Text/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem type="Active" press="onSelectRequest">
+														<cells>
+															<ObjectIdentifier title="{RequestorInfo>draftDisplay}"/>
+															<Text text="{RequestorInfo>srCategoryDesp}"/>
+															<Text text="{RequestorInfo>entityName}"/>
+															<Text text="{RequestorInfo>vendorName}"/>
+															<Text text="{RequestorInfo>submissionDateDisplay}"/>
+															<tnt:InfoLabel text="{RequestorInfo>srStatusDesp}" colorScheme="{RequestorInfo>statusColorScheme}" width="140px" displayOnly="true"/>
+															<Text text="{RequestorInfo>priorityDesc}"/>
+															<!--<HBox>-->
+															<!--	<Button icon="sap-icon://SAP-icons-TNT/receive-task" tooltip="Requested via email" visible="true" press="displayServiceR"-->
+															<!--		type="Approve"/>-->
+															<!--	<Button icon="sap-icon://edit" tooltip="Edit Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressEditRequest"-->
+															<!--		type="Transparent"/>-->
+															<!--	<Text width="0.2em"/>-->
+															<!--	<Button icon="sap-icon://delete" tooltip="Delete Request" visible="{RequestorInfo>isDeleteVisible}" press="onPressDeleteRequest"-->
+															<!--		type="Reject"/>-->
+															<!--   <Button icon="sap-icon://feedback" tooltip="Service Rating" visible="true" press="onPressServiceRating"-->
+															<!--		type="Approve"/>-->
+															<!--</HBox>-->
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+										</IconTabFilter>
+									</items>
+									<!--<content>-->
+									<!--</content>-->
+								</IconTabBar>
+							</headerContainer>
+						</ObjectHeader>
+					</content>
+					<footer>
+						<OverflowToolbar>
+						<Text text="For technical support, please contact: " />
+        <Link text="STEMSITSAPBTPTeam@stengg.com" href="mailto:STEMSITSAPBTPTeam@stengg.com" />
+        <ToolbarSpacer/>
+							<ToolbarSpacer/>
+							<!--<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-business-partner-anonymous" press="onPressApprovalPage" text="" type="Emphasized"/>-->
+							<Button icon="sap-icon://write-new" press="onPressCreateNewRequest" text="Create Service Request" type="Emphasized"/>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+				<Page id="resolutionCreate" title="{i18n>UserProfile.Page.Title}" busy="{EmployeeData>/isBusy}">
+					<customHeader>
+						<Toolbar>
+							<Button icon="sap-icon://nav-back" press="onPressBack"/>
+							<ToolbarSpacer/>
+							<Image class="imageCss sapUiSmallMarginEnd" densityAware="false"/>
+						</Toolbar>
+					</customHeader>
+					<content>
                 <core:Fragment
                     fragmentName="com.stengg.btp.ptpui.view.fragments.ResolutionCreate"
                     type="XML"
@@ -286,231 +436,111 @@
                     type="XML"
                 />
             </content>
-            <footer>
-                <OverflowToolbar>
-                    <Button
-                        id="MsgalrtBtn"
-                        text="{BillingReq>/popOverText}"
-                        icon="sap-icon://message-popup"
-                        press="showMessageLogPopover"
-                        type="Emphasized"
-                    />
-                    <ToolbarSpacer />
-                    <!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
-                    <Button
-                        icon="sap-icon://decline"
-                        press="onPressBack"
-                        text="Cancel"
-                        type="Default"
-                    />
-                    <Button
-                        icon="sap-icon://save"
-                        press="onPressSaveServiceRequest"
-                        text="Save"
-                        type="Default"
-                        visible="{oReadOnlyModel>/isSaveSubmitVisible}"
-                    />
-                    <Button
-                        icon="sap-icon://activate"
-                        press="onPressSubmit"
-                        text="Submit"
-                        type="Default"
-                        visible="{oReadOnlyModel>/isSaveSubmitVisible}"
-                    />
-                    <Button
-                        icon="sap-icon://action"
-                        press="onPressSubmit"
-                        text="Open Case"
-                        type="Default"
-                        visible="{oReadOnlyModel>/isCloseCaseVisible}"
-                    >
-                        <layoutData>
-                            <FlexItemData growFactor="1" />
-                        </layoutData>
-                        <customData>
-                            <core:CustomData
-                                key="target"
-                                value="LandingPage"
-                            />
-                            <core:CustomData
-                                key="actionSource"
-                                value="Reopen Case"
-                            />
-                        </customData>
-                    </Button>
-                    <Button
-                        icon="sap-icon://activate"
-                        press="onPressSubmit"
-                        text="Close Case"
-                        type="Default"
-                        visible="{oReadOnlyModel>/isCloseCaseVisible}"
-                    >
-                        <layoutData>
-                            <FlexItemData growFactor="1" />
-                        </layoutData>
-                        <customData>
-                            <core:CustomData
-                                key="target"
-                                value="LandingPage"
-                            />
-                            <core:CustomData
-                                key="actionSource"
-                                value="Close Case"
-                            />
-                        </customData>
-                    </Button>
-                </OverflowToolbar>
-            </footer>
-        </Page>
-        <Page
-            id="resolutionDisplay"
-            title="{i18n>UserProfile.Page.Title}"
-            busy="{EmployeeData>/isBusy}"
-        >
-            <customHeader>
-                <Toolbar>
-                    <Button
-                        icon="sap-icon://nav-back"
-                        press="onPressBack"
-                    />
-                    <ToolbarSpacer />
-                    <Image
-                        class="imageCss sapUiSmallMarginEnd"
-                        densityAware="false"
-                    />
-                </Toolbar>
-            </customHeader>
-            <content>
+					<footer>
+						<OverflowToolbar>
+							<Button id="MsgalrtBtn" text="{BillingReq>/popOverText}" icon="sap-icon://message-popup" press="showMessageLogPopover" type="Emphasized"/>
+							<ToolbarSpacer/>
+							<!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
+							<Button icon="sap-icon://decline" press="onPressBack" text="Cancel" type="Default"/>
+							<Button icon="sap-icon://save" press="onPressSaveServiceRequest" text="Save" type="Default" visible="{oReadOnlyModel>/isSaveSubmitVisible}"/>
+							<Button icon="sap-icon://activate" press="onPressSubmit" text="Submit" type="Default" visible="{oReadOnlyModel>/isSaveSubmitVisible}"/>
+							<Button icon="sap-icon://action" press="onPressSubmit" text="Open Case" type="Default" visible="{oReadOnlyModel>/isCloseCaseVisible}">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+								<customData>
+									<core:CustomData key="target" value="LandingPage"/>
+									<core:CustomData key="actionSource" value="Reopen Case"/>
+								</customData>
+							</Button>
+							<Button icon="sap-icon://activate" press="onPressSubmit" text="Close Case" type="Default" visible="{oReadOnlyModel>/isCloseCaseVisible}">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+								<customData>
+									<core:CustomData key="target" value="LandingPage"/>
+									<core:CustomData key="actionSource" value="Close Case"/>
+								</customData>
+							</Button>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+				<Page id="resolutionDisplay" title="{i18n>UserProfile.Page.Title}" busy="{EmployeeData>/isBusy}">
+					<customHeader>
+						<Toolbar>
+							<Button icon="sap-icon://nav-back" press="onPressBack"/>
+							<ToolbarSpacer/>
+							<Image class="imageCss sapUiSmallMarginEnd" densityAware="false"/>
+						</Toolbar>
+					</customHeader>
+					<content>
                 <core:Fragment
                     fragmentName="com.stengg.btp.ptpui.view.fragments.ResolutionDisplay"
                     type="XML"
                 />
             </content>
-            <footer>
-                <OverflowToolbar>
-                    <ToolbarSpacer />
-                    <Button
-                        icon="sap-icon://nav-back"
-                        press="onPressBackFromDisplay"
-                        text="Back"
-                        type="Default"
-                    />
-                </OverflowToolbar>
-            </footer>
-        </Page>
-        <Page
-            id="ServiceRatingPage"
-            title="{i18n>UserProfile.Page.Title}"
-            busy="{EmployeeData>/isBusy}"
-        >
-            <customHeader>
-                <Toolbar>
-                    <Button
-                        icon="sap-icon://nav-back"
-                        press="onPressBack"
-                    />
-                    <ToolbarSpacer />
-                    <Image
-                        class="imageCss sapUiSmallMarginEnd"
-                        densityAware="false"
-                    />
-                </Toolbar>
-            </customHeader>
-            <content>
+					<footer>
+						<OverflowToolbar>
+							<!--<Button id="showMsgeBtnId1" text="{BillingReq>/popOverText}" icon="sap-icon://message-popup" press="onPressShowMessage" type="Emphasized"/>-->
+							<ToolbarSpacer/>
+							<!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
+							<Button icon="sap-icon://nav-back" press="onPressBackFromDisplay" text="Back" type="Default"/>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+				<Page id="ServiceRatingPage" title="{i18n>UserProfile.Page.Title}" busy="{EmployeeData>/isBusy}">
+					<customHeader>
+						<Toolbar>
+							<Button icon="sap-icon://nav-back" press="onPressBack"/>
+							<ToolbarSpacer/>
+							<Image class="imageCss sapUiSmallMarginEnd" densityAware="false"/>
+						</Toolbar>
+					</customHeader>
+					<content>
                 <core:Fragment
                     fragmentName="com.stengg.btp.ptpui.view.fragments.ServiceRatingPage"
                     type="XML"
                 />
             </content>
-            <footer>
-                <OverflowToolbar>
-                    <Button
-                        id="MsgalrtBtnq1"
-                        text="{BillingReq>/popOverText}"
-                        icon="sap-icon://message-popup"
-                        press="showMessageLogPopover"
-                        type="Emphasized"
-                    />
-                    <ToolbarSpacer />
-                    <Button
-                        id="showMsgeBtnId3"
-                        icon="sap-icon://decline"
-                        press="onPressBack"
-                        text="Cancel"
-                        type="Default"
-                    />
-                    <Button
-                        id="showMsgeBtnId4"
-                        icon="sap-icon://save"
-                        press="onPressSaveNotificationRequest"
-                        text="Save"
-                        type="Default"
-                    />
-                    <Button
-                        id="showMsgeBtnId5"
-                        icon="sap-icon://activate"
-                        press="onPressSubmit"
-                        text="Submit"
-                        type="Default"
-                    />
-                </OverflowToolbar>
-            </footer>
-        </Page>
-        <Page
-            id="ApprovalPage"
-            title="{i18n>UserProfile.Page.Title}"
-            busy="{EmployeeData>/isBusy}"
-        >
-            <customHeader>
-                <Toolbar>
-                    <Button
-                        icon="sap-icon://nav-back"
-                        press="onPressBack"
-                    />
-                    <ToolbarSpacer />
-                    <Image
-                        class="imageCss sapUiSmallMarginEnd"
-                        densityAware="false"
-                    />
-                </Toolbar>
-            </customHeader>
-            <content>
+					<footer>
+						<OverflowToolbar>
+							<Button id="MsgalrtBtnq1" text="{BillingReq>/popOverText}" icon="sap-icon://message-popup" press="showMessageLogPopover" type="Emphasized"/>
+							<ToolbarSpacer/>
+							<!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
+							<Button id="showMsgeBtnId3" icon="sap-icon://decline" press="onPressBack" text="Cancel" type="Default"/>
+							<Button id="showMsgeBtnId4" icon="sap-icon://save" press="onPressSaveNotificationRequest" text="Save" type="Default"/>
+							<Button id="showMsgeBtnId5" icon="sap-icon://activate" press="onPressSubmit" text="Submit" type="Default"/>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+				<Page id="ApprovalPage" title="{i18n>UserProfile.Page.Title}" busy="{EmployeeData>/isBusy}">
+					<customHeader>
+						<Toolbar>
+							<Button icon="sap-icon://nav-back" press="onPressBack"/>
+							<ToolbarSpacer/>
+							<Image class="imageCss sapUiSmallMarginEnd" densityAware="false"/>
+						</Toolbar>
+					</customHeader>
+					 <content>
                 <core:Fragment
                     fragmentName="com.stengg.btp.ptpui.view.fragments.ResolutionApproval"
                     type="XML"
                 />
             </content>
-            <footer>
-                <OverflowToolbar>
-                    <Button
-                        id="MsgalrtBtn1"
-                        text="{BillingReq>/popOverText}"
-                        icon="sap-icon://message-popup"
-                        press="onPressShowMessage"
-                        type="Emphasized"
-                    />
-                    <Button
-                        text="More.."
-                        icon="sap-icon://SAP-icons-TNT/more"
-                        press="handleOpen"
-                    />
-                    <ToolbarSpacer />
-                    <!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
-                    <Button
-                        press="onPressSubmit"
-                        icon="sap-icon://complete"
-                        text="Resolved"
-                        type="Accept"
-                        visible="true"
-                    />
-                    <Button
-                        press="closeRequestDisplayDialog"
-                        icon="sap-icon://decline"
-                        type="Reject"
-                        text="Close"
-                    />
-                </OverflowToolbar>
-            </footer>
-        </Page>
-    </NavContainer>
+					<footer>
+						<OverflowToolbar>
+							<Button id="MsgalrtBtn1" text="{BillingReq>/popOverText}" icon="sap-icon://message-popup" press="onPressShowMessage" type="Emphasized"/>
+							<Button text="More.." icon="sap-icon://SAP-icons-TNT/more" press="handleOpen"/>
+							<ToolbarSpacer/>
+							<!--<Button icon="sap-icon://decline" press="onPressCancelRequest" text="Cancel" type="Default"/>-->
+							<Button press="onPressSubmit" icon="sap-icon://complete" text="Resolved" type="Accept" visible="true"/>
+							<Button press="closeRequestDisplayDialog" icon="sap-icon://decline" type="Reject" text="Close"/>
+							<!--<Button press="onPressSubmit" icon= "sap-icon://visits"  text="Clarification Required" type="Reject" visible="true"/>
+								<Button press="onPressForward" icon= "sap-icon://forward" text="Forward" type="Emphasized" visible="true"/>
+								<Button icon="sap-icon://save" press="onPressSaveNotificationRequest" text="Save" type="Default"/>
+								<Button press="onPressConfirm" icon= "sap-icon://create" text="Confirm" type="Neutral" visible="true"/>-->
+						</OverflowToolbar>
+					</footer>
+				</Page>
+			</NavContainer>
 </mvc:View>

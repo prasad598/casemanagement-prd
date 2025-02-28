@@ -8,7 +8,7 @@
 		<u:headerContent>
 			<layout:VerticalLayout width="20%">
 				<Label text="Created By"/>
-				<Text text="{UserInfo>/fullName} ({UserInfo>/logonId})"/>
+				<Text text="{userInfo>/firstname} {userInfo>/lastname}  ({userInfo>/email})"/>
 				<Label text="Contact Number"/>
 				<Text text="{oRequestData>/contactNumber}"/>
 				<!--<Label text="Email Subject"/>-->
@@ -18,8 +18,8 @@
 			</layout:VerticalLayout>
 			<layout:VerticalLayout></layout:VerticalLayout>
 			<layout:VerticalLayout width="30%">
-				<Label text="Sender Email Id"/>
-				<Text text="{UserInfo>/emailId}"/>
+				<Label text="Email Id"/>
+				<Text text="{userInfo>/email}"/>
 				<!--<Label text="CC Email Id(s)"/>
 				<Text text="{oRequestData>/ccEmail}"/>-->
 				<Label text="Status"/>
@@ -51,15 +51,18 @@
 									<Input editable="false" value="{oRequestData>/invoiceNo2}" 	visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"></Input>
 									<Label text="Invoice No"/>
 									<Input editable="false" value="{oRequestData>/invoiceNo3}" 	visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"></Input>
-									<Label text="Service Details (specify task requested of Resolution Team)"/>
+									<Label text="Please provide details of your query"/>
 									<TextArea value="{oRequestData>/srDetails}" editable="false"/>
 									<!--<Input editable="false" value="{oRequestData>/srDetails}"></Input>-->
-									<Label text="Vendor Name"/>
+									<Label text="Entity Name(of your customer)" required="true"/>
+									<Input editable="false" value="{oRequestData>/entityName}"></Input>
+									
+									<Label text="Your Company's Name"/>
 									<Input editable="false" value="{oRequestData>/vendorName}"/>
 									<Label text="Net Due Date" visible = "false"/>
 									<Input editable="false" visible = "false" value="{oRequestData>/dueDateDisplay}"></Input>
-									<Label text="Requested For (Name)"/>
-									<Input editable="false" value="{oRequestData>/requestedForName}"></Input>
+								<!--	<Label text="Requested For (Name)"/>
+									<Input editable="false" value="{oRequestData>/requestedForName}"></Input> -->
 									<core:Title text=""/>
 									<!--<Label id="urgentReq1" text="Urgent Request" visible="true"/>
 									<CheckBox text="Urgent" valueState="Error" enabled="false" selected="{=${oRequestData>/urgentRequest} === true}"/>-->
@@ -71,8 +74,8 @@
 									<Label text="Sector" visible="{= ${oRequestData>/sectorCode} === 'MARINE' || ${oRequestData>/sectorCode} === 'AERO' || ${oRequestData>/sectorCode} === 'CORP' || ${oRequestData>/sectorCode} === 'ELECT' || ${oRequestData>/sectorCode} === 'LAND' }" required="true"/>
 									<Input editable="false" visible="{= ${oRequestData>/sectorCode} === 'MARINE' || ${oRequestData>/sectorCode} === 'AERO' || ${oRequestData>/sectorCode} === 'CORP' || ${oRequestData>/sectorCode} === 'ELECT' || ${oRequestData>/sectorCode} === 'LAND'}" value="{oRequestData>/sectorDesp}"></Input>
 									
-									<Label text="Entity Name" required="true"/>
-									<Input editable="false" value="{oRequestData>/entityName}"></Input>
+									<Label text="CC email"/>
+									<Input id="ccemail" editable="false" value="{oRequestData>/ccEmail}"></Input>
 									<!--<Label text="Entity Name"/>-->
 									<!--<Input editable="false" value="{oRequestData>/srDetails}" id="caseSummaryId1"></Input>-->
 									<!--<Input id="vendorNameId1" editable="false" value="{oRequestData>/vendorName}"></Input>-->
@@ -80,13 +83,13 @@
 									<!--<Input id="PriorityId1" value="Medium" editable="false"></Input>-->
 									<!--<Label text="Staff Assigned"/>-->
 									<!--<Input value="{oRequestData>/requestedFor}" editable="false"></Input>-->
-									<Label text="Kofax Payment Request No"/>
-									<Input id="kofexPRNId1" editable="false" value="{oRequestData>/kofaxPaymentReqNo}"></Input>
+									<!--<Label text="Kofax Payment Request No"/>
+									<Input id="kofexPRNId1" editable="false" value="{oRequestData>/kofaxPaymentReqNo}"></Input> -->
 									<!--<Label text="Requested For" visible = "false"/>
 									<Input editable="false" visible = "false" value="{oRequestData>/requestedFor}"></Input>-->
 										
-										<Label text="Requested For (Email)"/>
-									<Input editable="false" value="{oRequestData>/requestedForEMail}"></Input>
+									<!--	<Label text="Requested For (Email)"/>
+									<Input editable="false" value="{oRequestData>/requestedForEMail}"></Input> -->
 								</f:content>
 							</f:SimpleForm>
 						</u:blocks>

@@ -4,17 +4,44 @@
   "description": "Security profile of called application",
   "scopes": [
     {
-      "name": "uaa.user",
-      "description": "UAA"
+      "name": "$XSAPPNAME.User",
+      "description": "Default scope for accessing the application"
+    },
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Scope for admin access"
     }
   ],
   "role-templates": [
     {
+      "name": "User",
+      "description": "Role for regular users",
+      "scope-references": [
+        "$XSAPPNAME.User"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Role for administrators",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    },
+    {
       "name": "Token_Exchange",
-      "description": "UAA",
+      "description": "Role for token exchange",
       "scope-references": [
         "uaa.user"
       ]
     }
-  ]
+  ],
+  "authorities": [
+    "$ACCEPT_GRANTED_AUTHORITIES"
+  ],
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://*.cfapps.us10.hana.ondemand.com/**"
+    ],
+    "token-validity": 43200 
+  }
 }

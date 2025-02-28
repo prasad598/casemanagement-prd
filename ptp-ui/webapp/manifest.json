@@ -86,6 +86,11 @@
                     "target": [
                         "Targetptpform"
                     ]
+                },
+                {
+                    "pattern": "Maintenance",
+                    "name": "Maintenance",
+                    "target": "Maintenance"
                 }
             ],
             "targets": {
@@ -95,7 +100,11 @@
                     "clearControlAggregation": false,
                     "viewId": "ptpform",
                     "viewName": "ptpform"
-                }
+                },
+                "Maintenance": {
+            "viewName": "Maintenance",
+            "viewLevel": 1
+        }
             }
         },
         "rootView": {

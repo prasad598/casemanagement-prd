@@ -1,0 +1,35 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <Page title="System Maintenance Notification">
+        <content>
+            <HBox justifyContent="Center" alignItems="Center" class="sapUiMediumMargin">
+                <!-- Image Container -->
+                <VBox>
+                    <Image src="images/Maintenance.PNG" width="500px" />
+                </VBox>
+
+                <!-- Text Container -->
+                <VBox alignItems="Start" class="sapUiMediumMargin">
+                  <!--  <Title text="System Maintenance Notification" level="H1"/> -->
+                     <FormattedText htmlText="&lt;strong style='font-size: 36px;'>System Maintenance Notification&lt;/strong>" />
+
+                     <Text text="" />
+                 <!--    <Text text="No Access Notice: " design="Bold" /> -->
+                    <FormattedText htmlText="&lt;strong>No Access Notice:&lt;/strong>" />
+                     <Text text="" />
+                    <Text text="Users will not be able to access the system from February 4 7:00 pm to February 6, 2025 10:00 pm SGT." />
+ <Text text="" />
+  <Text text="" />
+                    <Text text="Access will be resumed after February 6, 2025 10:00 pm SGT."  />
+ <Text text="" /> 
+  <Text text="" />
+                 <!--   <Text text="Should you encounter any issues or irregularities during or immediately after this maintenance, please contact" />
+                    <Link text="STEMSITSAPBTPTeam@stengg.com" href="mailto:STEMSITSAPBTPTeam@stengg.com" />
+                    <Text text="for further assistance." />  -->
+
+<Text text="Should you encounter any issues or irregularities during or immediately after this maintenance, please contact STEMSITSAPBTPTeam@stengg.com for further assistance." />
+                    
+                </VBox>
+            </HBox>
+        </content>
+    </Page>
+</mvc:View>
