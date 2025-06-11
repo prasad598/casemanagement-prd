@@ -1,0 +1,179 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uf="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.uxap" xmlns:month="sap.ui.unified.calendar">
+	<u:ObjectPageLayout enableLazyLoading="true" useIconTabBar="true" showTitleInHeaderContent="false">
+		<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="Service Request {oRequestData>/draftId} - {oRequestData>/requestId}"
+				objectImageURI="sap-icon://SAP-icons-TNT/user" objectImageShape="Circle" isObjectIconAlwaysVisible="true"></u:ObjectPageHeader>
+		</u:headerTitle>
+		<u:headerContent>
+			<layout:VerticalLayout width="20%">
+				<Label text="Created By"/>
+				<Text text="{userInfo>/firstname} {userInfo>/lastname}  ({userInfo>/email})"/>
+				<Label text="Contact Number"/>
+				<Text text="{oRequestData>/contactNumber}"/>
+				<!--<Label text="Email Subject"/>-->
+				<!--<Text text="Invoice Block / Release"/>-->
+				<Label text="Creation Date"/>
+				<Text text="{oRequestData>/submissionDateDisplay}"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+			<layout:VerticalLayout width="30%">
+				<Label text="Email Id"/>
+				<Text text="{userInfo>/email}"/>
+				<!--<Label text="CC Email Id(s)"/>
+				<Text text="{oRequestData>/ccEmail}"/>-->
+				<Label text="Status"/>
+				<Text text= "{= ${oRequestData>/srStatusDesp} === undefined ? 'Draft' : ${oRequestData>/srStatusDesp} }"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+		</u:headerContent>
+		<u:sections>
+			<u:ObjectPageSection title="Details" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="">
+						<u:blocks>
+							<f:SimpleForm layout="ResponsiveLayout" labelSpanL="2" editable="true" maxContainerCols="2">
+								<f:content>
+									<core:Title text="{i18n>Billing.Details.Form}"/>
+									<Label text="Service Request category"/>
+									<Select id="oCaseCategoryList1" enabled = "false" change="onListSelect" selectedKey="{oRequestData>/srCategoryCode}">
+										<core:Item key="0" text=""/>
+										<core:Item key="PayPO" text="Payment Status/ Advice/ PO"/>
+										<core:Item key="InvRel" text="Invoice Block / Release"/>
+										<core:Item key="Contra" text="AP / AR Contra"/>
+										<core:Item key="VenSOA" text="Vendor / Interco SOA"/>
+										<core:Item key="AuditCon" text="Audit Confirmation"/>
+										<core:Item key="OIssueR" text="Others"/>
+									</Select>
+									<Label text="Invoice No" required="true"/>
+									<Input editable="false" value="{oRequestData>/invoiceNo1}" 	visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"></Input>
+									<Label text="Invoice No"/>
+									<Input editable="false" value="{oRequestData>/invoiceNo2}" 	visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"></Input>
+									<Label text="Invoice No"/>
+									<Input editable="false" value="{oRequestData>/invoiceNo3}" 	visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"></Input>
+									<Label text="Please provide details of your query"/>
+									<TextArea value="{oRequestData>/srDetails}" editable="false"/>
+									<!--<Input editable="false" value="{oRequestData>/srDetails}"></Input>-->
+									<Label text="Entity Name(of your customer)" required="true"/>
+									<Input editable="false" value="{oRequestData>/entityName}"></Input>
+									
+									<Label text="Your Company's Name"/>
+									<Input editable="false" value="{oRequestData>/vendorName}"/>
+									<Label text="Net Due Date" visible = "false"/>
+									<Input editable="false" visible = "false" value="{oRequestData>/dueDateDisplay}"></Input>
+								<!--	<Label text="Requested For (Name)"/>
+									<Input editable="false" value="{oRequestData>/requestedForName}"></Input> -->
+									<core:Title text=""/>
+									<!--<Label id="urgentReq1" text="Urgent Request" visible="true"/>
+									<CheckBox text="Urgent" valueState="Error" enabled="false" selected="{=${oRequestData>/urgentRequest} === true}"/>-->
+									
+									<Label text="Urgent Payment Request" visible="false"/>
+								<!--	<CheckBox id="urgentReq1" text="Urgent" valueState="Error" select="onSelectUrgent" enabled="false"
+										visible="{= ${oRequestData>/srCategoryCode} === 'PayPO'}" selected="{=${oRequestData>/urgentRequest} === true}"/> -->
+									
+									<Label text="Sector" visible="{= ${oRequestData>/sectorCode} === 'MARINE' || ${oRequestData>/sectorCode} === 'AERO' || ${oRequestData>/sectorCode} === 'CORP' || ${oRequestData>/sectorCode} === 'ELECT' || ${oRequestData>/sectorCode} === 'LAND' }" required="true"/>
+									<Input editable="false" visible="{= ${oRequestData>/sectorCode} === 'MARINE' || ${oRequestData>/sectorCode} === 'AERO' || ${oRequestData>/sectorCode} === 'CORP' || ${oRequestData>/sectorCode} === 'ELECT' || ${oRequestData>/sectorCode} === 'LAND'}" value="{oRequestData>/sectorDesp}"></Input>
+									
+									<Label text="CC email"/>
+									<Input id="ccemail" editable="false" value="{oRequestData>/ccEmail}"></Input>
+									<!--<Label text="Entity Name"/>-->
+									<!--<Input editable="false" value="{oRequestData>/srDetails}" id="caseSummaryId1"></Input>-->
+									<!--<Input id="vendorNameId1" editable="false" value="{oRequestData>/vendorName}"></Input>-->
+									<!--<Label text="Priority"/>-->
+									<!--<Input id="PriorityId1" value="Medium" editable="false"></Input>-->
+									<!--<Label text="Staff Assigned"/>-->
+									<!--<Input value="{oRequestData>/requestedFor}" editable="false"></Input>-->
+									<!--<Label text="Kofax Payment Request No"/>
+									<Input id="kofexPRNId1" editable="false" value="{oRequestData>/kofaxPaymentReqNo}"></Input> -->
+									<!--<Label text="Requested For" visible = "false"/>
+									<Input editable="false" visible = "false" value="{oRequestData>/requestedFor}"></Input>-->
+										
+									<!--	<Label text="Requested For (Email)"/>
+									<Input editable="false" value="{oRequestData>/requestedForEMail}"></Input> -->
+								</f:content>
+							</f:SimpleForm>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection id="Attachments1" title="Attachments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<Title class="h2Title" text="Uploaded Supporting Documents"/>
+									<!--<Label/>-->
+									<!--<HBox>-->
+									<!--	<uf:FileUploader id="fileUploader1" visible="false" style="Default" placeholder="Select File"/>-->
+									<!--	<Button visible="false" icon="sap-icon://upload" press="handleUploadPress"/>-->
+									<!--</HBox>-->
+									<!--<VBox>
+										<CheckBox text="Email to Customer" selected="{NotificationReq>/isEmailCustomerSelected}" select="onSelectEmailCustomer"/>
+										<MultiInput id="emailMInputId" placeholder="Insert Email Addresses" change="onEnterCustomerEmail" showValueHelp="false"
+											visible="{ReadOnlyModel>/isEmailCustomerVisible}"></MultiInput>
+									</VBox>-->
+									<!--	<CheckBox text="Email back to Requestor"/>
+									<CheckBox text="Mail Hardcopy"/>
+									<VBox>
+										<CheckBox text="Upload to Customer's portal" select="onSelectUploadCustomerPortal"/>
+										<Input width="50%" value="{NotificationReq>/customerPortal}" placeholder="Portal Address" visible="{ReadOnlyModel>/isUploadCustomerVisible}"/>
+									</VBox>-->
+									<Table items="{oRequestData>/attachmentList}">
+										<columns>
+											<Column>
+												<Text text="File Name"/>
+											</Column>
+											
+											<Column>
+												<Text text="Document Type"/>
+											</Column>
+											
+											<Column>
+												<Text text="Type"/>
+											</Column>
+											<Column>
+												<Text text="Created Date"/>
+											</Column>
+											<Column>
+												<Text text="Downlaod"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem>
+												<cells>
+													<Text text="{oRequestData>fileName}"/>
+													<Text text="{oRequestData>documentType}"/>
+													<Text text="{oRequestData>mimeType}" wrapping="true"/>
+													<Text text="{oRequestData>attachmentDateDisplay}"/>
+													<Button icon="sap-icon://download" text="" press="onPressAttachmentDownload" type="Default"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection title="Comments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<!--<FeedInput class="sapUiSmallMarginTopBottom" maxLength="200" value="Test Text" post="onPostComment" showIcon="false"/>-->
+									<List growing="true" growingThreshold="4" items="{oRequestData>/clarificationCommentList}" showSeparators="Inner">
+										<FeedListItem icon="{oRequestData>/userImage}" iconDensityAware="false" info="{oRequestData>userType}" sender="{oRequestData>userName}"
+											text="{oRequestData>comments}" timestamp="{ path: 'oRequestData>commentDisplayDate' }"/>
+									</List>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+		</u:sections>
+	</u:ObjectPageLayout>
+</core:FragmentDefinition>

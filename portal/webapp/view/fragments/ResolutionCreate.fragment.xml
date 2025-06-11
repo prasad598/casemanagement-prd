@@ -1,0 +1,369 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uf="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:u="sap.uxap" xmlns:month="sap.ui.unified.calendar" xmlns:tnt="sap.tnt">
+	<u:ObjectPageLayout enableLazyLoading="true" useIconTabBar="true" showTitleInHeaderContent="false">
+	<!--	<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="{oRequestData>/draftId}  {oRequestData>/requestId}" objectImageURI="sap-icon://SAP-icons-TNT/user"
+				objectImageShape="Circle" isObjectIconAlwaysVisible="false"></u:ObjectPageHeader>
+		</u:headerTitle> -->
+		<u:headerContent>
+			<layout:VerticalLayout width="20%">
+				<Label text="Created By"/>
+				<!--	<Text text="{userInfo>/displayName}"/> -->
+                <Text text="{userInfo>/fullname}"/>
+				<Label text="Contact Number"/>
+				<Input value ="{oRequestData>/contactNumber}" maxLength="12" liveChange="checkNumber"/>
+				<Label text="Creation Date"/>
+				<Text text="{oRequestData>/submissionDateDisplay}"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+			<layout:VerticalLayout width="30%">
+				<Label text="Email Id"/>
+				<Text text="{userInfo>/email}"/>
+				<Label text="Status"/>
+				<Text text= "{= ${oRequestData>/srStatusDesp} === undefined ? 'Draft' : ${oRequestData>/srStatusDesp} }"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout></layout:VerticalLayout>
+		</u:headerContent>
+		<u:sections>
+			<u:ObjectPageSection title="{i18n>Billing.Section.Details}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="">
+						<u:blocks>
+							<f:SimpleForm layout="ResponsiveLayout" labelSpanL="2" editable="true" maxContainerCols="2">
+								<f:content>
+            <core:Title text="Service Request Details" />
+            <Label
+                text="Service Request category"
+                required="true"
+            />
+ 
+            <Select
+                id="oCaseCategoryList"
+                change="onListSelect"
+                selectedKey="{oRequestData>/srCategoryCode}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            >
+                <core:Item
+                    key="0"
+                    text=""
+                />
+                <core:Item
+                    key="PayPO"
+                    text="Payment Status/ Advice"
+                />
+            <!--   <core:Item
+                    key="InvRel"
+                    text="Invoice Block / Release"
+                />
+                <core:Item
+                    key="Contra"
+                    text="AP / AR Contra"
+                /> -->
+                <core:Item
+                    key="VenSOA"
+                    text="Vendor / Interco SOA"
+                />
+                <core:Item
+                    key="AuditCon"
+                    text="Audit Confirmation"
+                />
+                <core:Item
+                    key="OIssueR"
+                    text="Others"
+                />
+            </Select>
+            <!--<Label  text="" visible = "true"/>-->
+            <!--    <Input  visible = "true">-->
+            <!--</Input>  -->
+            <!--<Button id="ssssww4" text="Add Invoice Numbers" icon="sap-icon://add" press="onPressShowMessage" type="Emphasized"/>-->
+            <Label
+                id="invoiceNoLbl"
+                text="Invoice No"
+                required="true"
+            />
+            <Input
+                id="invoiceNoId"
+                maxLength="20"
+                value="{oRequestData>/invoiceNo1}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"
+            />
+      <!--      <Label
+                id="invoiceNoLbl2"
+                text="Invoice No"
+            />
+            <Input
+                id="invoiceNoId2"
+                maxLength="20"
+                value="{oRequestData>/invoiceNo2}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"
+            />
+            <Label
+                id="invoiceNoLbl3"
+                text="Invoice No"
+            />
+            <Input
+                id="invoiceNoId3"
+                maxLength="20"
+                placeholder="If more than 3 invoices Please use attachment..."
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                tooltip="If more than 3 invoices Please use attachment..."
+                value="{oRequestData>/invoiceNo3}"
+                visible="{= ${oRequestData>/srCategoryCode} === 'PayPO' || ${oRequestData>/srCategoryCode} === 'InvRel' || ${oRequestData>/srCategoryCode} === 'Contra' }"
+            /> -->
+            <Label
+                text="Please provide details of your query"
+                required="true"
+            />
+            <TextArea
+                id="caseSummaryId"
+                value="{oRequestData>/srDetails}"
+                growing="true"
+                maxLength="3000"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                liveChange="onLiveChangeSrDetails"
+                valueState="{oReadOnlyModel>/srValueState}"
+                valueStateText="{oReadOnlyModel>/srValueStateTxt}"
+            />
+            <Label
+                text="Entity Name(of your customer)"
+                required="true"
+            />
+            <Select
+                selectedKey="{oRequestData>/entityCode}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                change="onSelectEntity"
+                items="{oEntityModel>/EntityList}"
+            >
+                <core:Item
+                    key="{oEntityModel>code}"
+                    text="{oEntityModel>desc}"
+                />
+            </Select>
+             <Label
+                text="Your Company's Name"
+                required="true"
+            />
+            <Input
+                id="vendorNameId"
+                maxLength="100"
+                liveChange="onLiveVendorChange"
+                value="{oRequestData>/vendorName}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            />
+         <!--    <Label
+                text="Invoice No"
+                required="true"
+            />
+            <Input
+                id="invoiceNo"
+                maxLength="100"
+                liveChange="onLiveVendorChange"
+                value="{oRequestData>/invoiceNo}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            /> -->
+             <core:Title text="Sender Details" />
+            <Label
+                text="Urgent Payment Request"
+                visible="false"
+            />
+         <!--   <CheckBox
+                id="urgentReq"
+                text="Urgent"
+                valueState="Error"
+                select="onSelectUrgent"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                visible="{= ${oRequestData>/srCategoryCode} === 'PayPO'}"
+                selected="{=${oRequestData>/urgentRequest} === true}"
+            /> -->
+            <Label
+                text="Sector"
+                required="true"
+                visible="false"
+            />
+            <Select
+                visible="false"
+                selectedKey="{oRequestData>/sectorCode}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+                change="onSelectSector"
+            >
+                <core:Item
+                    key=""
+                    text=""
+                />
+                <core:Item
+                    key="AERO"
+                    text="Aerospace"
+                />
+                <core:Item
+                    key="CORP"
+                    text="Group Corporate"
+                />
+                <core:Item
+                    key="ELECT"
+                    text="Electronics"
+                />
+                <core:Item
+                    key="LAND"
+                    text="Land Systems"
+                />
+                <core:Item
+                    key="MARINE"
+                    text="Marine"
+                />
+            </Select>
+           
+ 
+           
+            <Label
+                visible="false"
+                text="Net Due Date"
+                labelFor="DP1"
+            />
+            <DatePicker
+                visible="false"
+                id="DP1"
+                placeholder="Enter Due Date ..."
+                enabled="{=${oRequestData>/srCategoryCode} === 'PayPO'}"
+                change="handleChange"
+                class="sapUiSmallMarginBottom"
+                valueFormat="MM.dd.yyyy"
+                displayFormat="dd.MM.yyyy"
+                value="{oRequestData>/netDueDate}"
+            />
+          <!--  <Label text="Requested For (Name)" />
+            <Input
+                id="requestedForName"
+                maxLength="100"
+                showValueHelp="false"
+                value="{oRequestData>/requestedForName}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            />-->
+           <!-- <Label text="Sender email" required="true" />
+            <Input
+                id="requestedForEmail"
+                maxLength="100"
+                showValueHelp="false"
+                value="{oRequestData>/requestedForEMail}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            /> -->
+              <Label text="CC email" />
+            <Input
+                id="requestedForCCEmail"
+                maxLength="100"
+                showValueHelp="false"
+                value="{oRequestData>/ccEmail}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            />
+           <!-- <Label text="Requested For (Contact)" />
+            <Input
+                id="requestedForContact"
+                maxLength="100"
+                showValueHelp="false"
+                value="{oRequestData>/requestedForContact}"
+                enabled="{oReadOnlyModel>/isFieldEnabled}"
+            />-->
+        </f:content>
+							</f:SimpleForm>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection id="Attachments" title="Attachments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<!--<Title class="h2Title" text="Upload Supporting Documents"/>-->
+									<Label text="Select Document"/>
+                                    
+								<!--	<Select selectedKey="{oRequestData>/docType}" change="handleDocTypeChange">
+										<core:Item key="" text=""/>
+										<core:Item key="SOA" text="Statement of Account (SOA)"/>
+										<core:Item key="AuditConfirmation" text="Audit Confirmation"/>
+										<core:Item key="Invoices" text="List of Invoices"/>
+										<core:Item key="Others" text="Others"/>
+									</Select> -->
+									<Label/>
+                                    <tnt:InfoLabel id="il1" text="Please upload PDF/Excel Only" renderMode="Narrow" colorScheme="6"/>
+									<HBox>
+									<!--	<uf:FileUploader id="fileUploader" style="Default" placeholder="Select File"/> -->
+                                        <uf:FileUploader id="fileUploader" style="Default" placeholder="Select File" typeMissmatch="typeMissmatch" fileType="xlsx,pdf"/>
+										<Button icon="sap-icon://upload" press="handleUploadPress"/>
+									</HBox>
+									<!--<VBox>
+										<CheckBox text="Email to Customer" selected="{NotificationReq>/isEmailCustomerSelected}" select="onSelectEmailCustomer"/>
+										<MultiInput id="emailMInputId" placeholder="Insert Email Addresses" change="onEnterCustomerEmail" showValueHelp="false"
+											visible="{ReadOnlyModel>/isEmailCustomerVisible}"></MultiInput>
+									</VBox>-->
+									<!--	<CheckBox text="Email back to Requestor"/>
+									<CheckBox text="Mail Hardcopy"/>
+									<VBox>
+										<CheckBox text="Upload to Customer's portal" select="onSelectUploadCustomerPortal"/>
+										<Input width="50%" value="{NotificationReq>/customerPortal}" placeholder="Portal Address" visible="{ReadOnlyModel>/isUploadCustomerVisible}"/>
+									</VBox>-->
+									<Table items="{oRequestData>/attachmentList}">
+										<columns>
+											<Column>
+												<Text text="File Name"/>
+											</Column>
+											<Column>
+												<Text text="Document Type"/>
+											</Column>
+											<Column>
+												<Text text="Type"/>
+											</Column>
+											<Column>
+												<Text text="Created Date"/>
+											</Column>
+											<Column>
+												<Text text="Download"/>
+											</Column>
+											<Column>
+												<Text text="Delete"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem>
+												<cells>
+													<Text text="{oRequestData>fileName}" wrapping="true"/>
+													<Text text="{oRequestData>documentType}"/>
+													<Text text="{oRequestData>mimeType}" wrapping="true"/>
+												    <Text text="{oRequestData>attachmentDateDisplay}"/>
+													<Button icon="sap-icon://download" text="" press="onPressAttachmentDownload" type="Default"/>
+													<Button icon="sap-icon://delete" enabled="{oRequestData>isFieldEnabled}" text="" press="onPressDeleteAttachment" type="Default"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection title="Comments" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection>
+						<u:blocks>
+							<layout:VerticalLayout width="100%">
+								<layout:content>
+									<Title class="sapMTitle sapMTitleStyleH6"
+										text="Add additional information for Payment and Reso Team. Click on Arrow key to add your comments"/>
+									<!--<Title text="Add additional information for Payment & Reso Team. Click on Arrow key to add your comments."/>-->
+									<FeedInput class="sapUiSmallMarginTopBottom" growing="true" rows = "2" maxLength="5000" post="onPostComment" showIcon="false"/>
+									<List growing="true" growingThreshold="4" items="{oRequestData>/clarificationCommentList}" showSeparators="Inner">
+										<FeedListItem icon="{userInfo>/userImage}" iconDensityAware="false" info="{oRequestData>userType}" sender="{oRequestData>userName}"
+											text="{oRequestData>comments}" timestamp="{ path: 'oRequestData>commentDisplayDate' }"/>
+									</List>
+								</layout:content>
+							</layout:VerticalLayout>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+		</u:sections>
+	</u:ObjectPageLayout>
+</core:FragmentDefinition>
